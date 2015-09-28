@@ -1,0 +1,32 @@
+<assembly>
+    <id>all</id>
+    <formats>
+	<format>tar.gz</format>
+	<format>dir</format>
+    </formats>
+    <dependencySets>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+            <outputDirectory>/</outputDirectory>
+            <unpack>false</unpack>
+        </dependencySet>
+    </dependencySets>
+    <fileSets>
+	<fileSet>
+         <directory>../cfg/target/classes/config</directory>
+    	 <outputDirectory>config</outputDirectory>
+    	     <includes>
+    		<include>*</include>
+    	     </includes>
+	</fileSet>
+	<fileSet>
+         <directory>../</directory>
+    	 <outputDirectory>/</outputDirectory>
+    	     <includes>
+    		<include>readme*</include>
+		<include>*.example</include>
+    	     </includes>
+	</fileSet>
+    </fileSets>
+</assembly>
