@@ -1,6 +1,10 @@
+
+
+drop table if exists SystemEvents CASCADE;
+--drop SEQUENCE if exists SystemEvents_id_sec; --autogen sequence name
 CREATE TABLE SystemEvents
 (
-        ID serial not null primary key,
+        ID bigserial not null primary key,
         CustomerID bigint,
         ReceivedAt timestamp without time zone NULL,
         DeviceReportedTime timestamp without time zone NULL,
@@ -26,9 +30,11 @@ CREATE TABLE SystemEvents
         SystemID int NULL
 );
 
+drop table if exists SystemEventsProperties CASCADE;
+--drop SEQUENCE if exists SystemEventsProperties_id_sec; --autogen sequence name
 CREATE TABLE SystemEventsProperties
 (
-        ID serial not null primary key,
+        ID bigserial not null primary key,
         SystemEventID int NULL ,
         ParamName varchar(255) NULL ,
         ParamValue text NULL
