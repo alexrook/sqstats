@@ -8,7 +8,7 @@ create table squid_events (id bigint not null primary key,
 		    url varchar,
 		    http_result varchar,
     		    bytes bigint,
-		    method varchar(5),
+		    method varchar(8), -- GET, PUT, OPTIONS ...
 		    hier_code varchar(115),
 		    content_type varchar(115));
 
