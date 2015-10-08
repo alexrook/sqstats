@@ -12,7 +12,7 @@ create table squid_events (id bigint not null primary key,
 		    hier_code varchar(115),
 		    content_type varchar(115));
 
-create or replace function ft_ins()
+create or replace function f_tai()
     returns trigger
 AS
 $$
@@ -50,9 +50,9 @@ $$
 language plpgsql;
 
 
-drop trigger if exists ti_SystemEvents on SystemEvents;
-create trigger ti_SystemEvents after insert
+drop trigger if exists tai_SystemEvents on SystemEvents;
+create trigger tai_SystemEvents after insert
 on SystemEvents
 for each row
-execute procedure ft_ins();
+execute procedure f_tai();
 
