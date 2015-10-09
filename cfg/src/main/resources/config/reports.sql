@@ -69,6 +69,17 @@ select date_trunc('day',request_date) as day,/* дата */
 	count(client_host) as conn_count /*всего соединений за день для определенного клиента*/
     from squid_events group by day,client_host,site;
 
+/*итоги за день по сайтам*/
+drop /*MATERIALIZED*/ view if exists vr_day_sums_site ;
+create or replace /*MATERIALIZED*/ view vr_day_sums_site
+as
+select  date_trunc('day',request_date) as day,/* дата */
+	gethostname(url) as site, -- сайт
+	sum(duration) as duration,/* общее время соединений  за день*/
+        sum(bytes) as bytes, /* сумма байтов*/
+	count(client_host) as conn_count /*всего соединений за день для определенного сайта*/
+    from squid_events group by day,site;
+
 
 
 
