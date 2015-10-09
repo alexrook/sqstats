@@ -1,5 +1,5 @@
 /*
-*    auxiliary tables
+*    auxiliary tables - contenttype
 */
 
 
@@ -197,7 +197,7 @@ copy  contentType(parentId,value,description) from stdin;
 12	application/x-tar	Tarball
 12	text/x-jquery-tmpl	jQuery
 12	application/x-javascript	no desc
-12	-	unknown type from squid access.logg
+12	-	unknown type from squid access.log
 \.
 
 drop function if exists getContentTypeId(varchar);
@@ -206,22 +206,22 @@ returns int
 as
 $$
 declare
-    result int=0;
-    nid int;
+    result int;
 begin
-    select id into result from contenttype where lower(trim(value))=lower(trim(cType));
+    cType=lower(trim(cType));
+    select id into result from contenttype where lower(trim(value))=cType;
     if result is null
      then
-	select nextval('contenttype_id_seq') into nid;
+	select nextval('contenttype_id_seq') into result;
 	insert into contenttype(id,parentId,value,description) 
-				    values(nid,
+				    values(result,
 				    12, --unknown+nonstandart
-				    lower(trim(cType)),
+				    cType,
 				    'auto-insert');
-	return nid;
-    else
-	return result;
+
     end if;
+
+    return result;
 
 end;
 $$ language plpgsql;
