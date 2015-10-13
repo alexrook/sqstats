@@ -203,6 +203,23 @@ copy  contentType(parentId,value,description) from stdin;
 drop function if exists getContentTypeId(varchar);
 create or replace function getContentTypeId(cType varchar)
 returns int
+immutable
+as
+$$
+declare
+    result int;
+begin
+    cType=lower(trim(cType));
+    select id into result from contenttype where lower(trim(value))=cType;
+    return result;
+
+end;
+$$ language plpgsql;
+
+---popultate content type
+drop function if exists popContentType(varchar);
+create or replace function popContentType(cType varchar)
+returns int
 as
 $$
 declare
@@ -220,9 +237,7 @@ begin
 				    'auto-insert');
 
     end if;
-
     return result;
-
 end;
-$$ language plpgsql;
+$$ language plpgsql ;
 
