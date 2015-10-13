@@ -1,5 +1,5 @@
 /*
-create table squid_events (id bigint not null primary key,
+create table squidevents (id bigint not null primary key,
 		    from_squid varchar(60),
 		    request_date timestamp,
 		    duration bigint,
@@ -12,7 +12,7 @@ create table squid_events (id bigint not null primary key,
 		    content_type varchar(115));
 */
 
-drop function if exists f_tai_systemevents();
+drop function if exists f_tai_systemevents() cascade;
 create or replace function f_tai_systemevents()
     returns trigger
 AS
@@ -40,7 +40,7 @@ begin
      parsed_message[6]=popMethod(parsed_message[6]);
      parsed_message[10]=popContentType(parsed_message[10]);
 
-    insert into squid_events(id,
+    insert into squidevents(id,
 			    from_squid,
 			    request_date,
 			    duration,

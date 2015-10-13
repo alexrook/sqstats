@@ -1,6 +1,6 @@
-drop table if exists squid_events cascade;
+drop table if exists squidevents cascade;
 
-create table squid_events (
+create table squidevents (
 		    id bigint not null primary key,
 		    from_squid varchar(60),
 		    request_date timestamp,
