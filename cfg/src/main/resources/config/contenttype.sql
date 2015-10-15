@@ -169,7 +169,7 @@ copy  contentType(parentId,value,description) from stdin;
 10	application/vnd.google-earth.kml+xml	KML файлы (например, для Google Earth)
 \.
 
---vendor
+--pkcs
 SELECT setval('contenttype_id_seq', 940);
 
 copy  contentType(parentId,value,description) from stdin;
