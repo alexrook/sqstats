@@ -130,7 +130,7 @@ copy  contentType(parentId,value,description) from stdin;
 8	text/css	Cascading Style Sheets (RFC 2318)
 8	text/csv	CSV (RFC 4180)
 8	text/html	HTML (RFC 2854)
-8	text/javascript (Obsolete)	JavaScript(RFC 4329)
+8	text/javascript	(Obsolete) JavaScript(RFC 4329)
 8	text/plain	текстовые данные (RFC 2046 и RFC 3676)
 8	text/php	Скрипт языка PHP
 8	text/xml	Extensible Markup Language (RFC 3023)
