@@ -21,6 +21,7 @@ declare
 parsed_message varchar[];
 req_date timestamp;
 begin
+    -- http://wiki.squid-cache.org/Features/LogFormat#Default_Formats
     parsed_message=regexp_split_to_array(trim(NEW.message),E'\\s+');
     req_date=to_timestamp(((regexp_split_to_array(trim(parsed_message[1]),E'\\.'))[1])::double precision); --timestamp without millsec
 
