@@ -1,6 +1,6 @@
 /*
-*  report  views
-*/
+ *  report  views
+ */
 
 
 /*итоги за день */
@@ -11,28 +11,37 @@ select date_trunc('day',request_date) as day,/* дата */
 	sum(duration) as duration,/* общее время соединений */
         sum(bytes) as bytes, /* общая сумма байтов */
 	count(client_host) as conn_count /*всего соединений за один день*/
-    from squid_events group by day;
+    from squidevents group by day;
 
 
 
 /*итоги за день по клиентам*/
 drop /*MATERIALIZED*/ view if exists vr_day_sums_client ;
 create or replace /*MATERIALIZED*/ view vr_day_sums_client
-as
-select date_trunc('day',request_date) as day,/* дата */
-	client_host,/* клиент */
+as 
+select day,
+	b.address, -- ip
+	b.name, -- hostname
+	b.description,-- client host description
+	duration,bytes,conn_count
+from
+(select  date_trunc('day',request_date) as day,/* дата */
+	client_host,
 	sum(duration) as duration,/* общее время соединения  за день для клиента */
         sum(bytes) as bytes, /* сумма байтов для клиента */
 	count(client_host) as conn_count /*всего соединений за день для определенного клиента*/
-    from squid_events group by day,client_host;
+    from squidevents
+    group by day,client_host) as a,
+    clienthost b
+    where a.client_host=b.id;
 
 --todo: month year
 
 /* select method,(select regexp_matches(url,'^(https?:\/\/)?(www\.)?([a-zA-Z0-9\.\-\_]*)')) 
     from squid_events where id>87000; */
 
-drop function if exists getHostName(varchar) cascade;
-create or replace function getHostName(url varchar) 
+drop function if exists getHostNameFromUrl(varchar) cascade;
+create or replace function getHostNameFromUrl(url varchar) 
 returns varchar 
 as
 $$
@@ -61,27 +70,36 @@ language plpgsql;
 drop /*MATERIALIZED*/ view if exists vr_day_sums_client_site ;
 create or replace /*MATERIALIZED*/ view vr_day_sums_client_site
 as
-select date_trunc('day',request_date) as day,/* дата */
+select day,
+	b.address, -- ip
+	b.name, -- hostname
+	b.description,-- client host description
+	site,
+	duration,bytes,conn_count
+from
+(select date_trunc('day',request_date) as day,/* дата */
 	client_host,/* клиент */
-	gethostname(url) as site, -- сайт
-	sum(duration) as duration,/* общее время соединения  за день для клиента */
-        sum(bytes) as bytes, /* сумма байтов для клиента */
-	count(client_host) as conn_count /*всего соединений за день для определенного клиента*/
-    from squid_events group by day,client_host,site;
+	gethostnamefromurl(url) as site, -- сайт
+	sum(duration) as duration,/* общее время соединения  за день для клиента по сайтам*/
+        sum(bytes) as bytes, /* сумма байтов для клиента по сайтам*/
+	count(client_host) as conn_count /*всего соединений за день для определенного клиента и сайта*/
+    from squidevents group by day,client_host,site) as a,
+    clienthost b
+    where b.id=a.client_host;
 
 /*итоги за день по сайтам*/
 drop /*MATERIALIZED*/ view if exists vr_day_sums_site ;
 create or replace /*MATERIALIZED*/ view vr_day_sums_site
 as
 select  date_trunc('day',request_date) as day,/* дата */
-	gethostname(url) as site, -- сайт
+	gethostnamefromurl(url) as site, -- сайт
 	sum(duration) as duration,/* общее время соединений  за день*/
         sum(bytes) as bytes, /* сумма байтов*/
 	count(client_host) as conn_count /*всего соединений за день для определенного сайта*/
-    from squid_events group by day,site;
+    from squidevents group by day,site;
 
 
 
 
 
-
+ 
