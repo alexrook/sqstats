@@ -1,0 +1,5 @@
+
+#name rules
+t -trigger (a -after, b-before, i - insert, i.e tai - trigger after insert)
+v- view (r -reports)
+
