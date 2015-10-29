@@ -1,0 +1,106 @@
+<table border="1">
+  <tr>
+    <th align="center">day</th>
+    <th align="center">duration</th>
+    <th align="center">bytes</th>
+    <th align="center">conn_count</th>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-13 00:00:00</td>
+    <td align="right">26429215</td>
+    <td align="right">661620208</td>
+    <td align="right">33835</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-14 00:00:00</td>
+    <td align="right">98690361</td>
+    <td align="right">2969728520</td>
+    <td align="right">86378</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-15 00:00:00</td>
+    <td align="right">100668741</td>
+    <td align="right">2684720369</td>
+    <td align="right">100709</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-16 00:00:00</td>
+    <td align="right">89653163</td>
+    <td align="right">2298612143</td>
+    <td align="right">65371</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-17 00:00:00</td>
+    <td align="right">457515</td>
+    <td align="right">108207036</td>
+    <td align="right">550</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-18 00:00:00</td>
+    <td align="right">158355</td>
+    <td align="right">96183676</td>
+    <td align="right">541</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-19 00:00:00</td>
+    <td align="right">65720251</td>
+    <td align="right">2190124422</td>
+    <td align="right">76509</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-20 00:00:00</td>
+    <td align="right">82203355</td>
+    <td align="right">1352268944</td>
+    <td align="right">67020</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-21 00:00:00</td>
+    <td align="right">47432403</td>
+    <td align="right">1506316494</td>
+    <td align="right">81116</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-22 00:00:00</td>
+    <td align="right">28454467</td>
+    <td align="right">1637260061</td>
+    <td align="right">88953</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-23 00:00:00</td>
+    <td align="right">59376838</td>
+    <td align="right">2491075516</td>
+    <td align="right">76210</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-24 00:00:00</td>
+    <td align="right">225939</td>
+    <td align="right">157808392</td>
+    <td align="right">631</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-25 00:00:00</td>
+    <td align="right">212313</td>
+    <td align="right">125963218</td>
+    <td align="right">515</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-26 00:00:00</td>
+    <td align="right">82247127</td>
+    <td align="right">2294381572</td>
+    <td align="right">50970</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-27 00:00:00</td>
+    <td align="right">52889298</td>
+    <td align="right">826374637</td>
+    <td align="right">35982</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">2015-10-28 00:00:00</td>
+    <td align="right">57337168</td>
+    <td align="right">928058136</td>
+    <td align="right">37050</td>
+  </tr>
+</table>
+
+
