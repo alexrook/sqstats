@@ -13,4 +13,22 @@
     <packaging>war</packaging>
     <name>squid-stats-www</name>
 
+    <properties>
+        <!-- this charm my ide -->
+        <org-netbeans-modules-maven-jaxws.rest_2e_config_2e_type>ide</org-netbeans-modules-maven-jaxws.rest_2e_config_2e_type>
+    </properties>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <finalName>sqstats</finalName>
+    </build>
+    
 </project>
