@@ -1,3 +1,5 @@
 db.host=example.com
 db.username=syslog
+db.password=xxx
 db.name=syslog-squid-db
+squid.syslog.facility=local3
