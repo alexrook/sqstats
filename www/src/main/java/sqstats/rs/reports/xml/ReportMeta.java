@@ -1,8 +1,7 @@
 package sqstats.rs.reports.xml;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -13,9 +12,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ReportMeta {
 
     private String statement, name;
+    private Date genDate;
 
     private Map<Integer, ReportParam> params = new HashMap<>(3);
 
+    public Date getGenDate() {
+        return genDate;
+    }
+
+    public void setGenDate(Date genDate) {
+        this.genDate = genDate;
+    }
+
+    
     public String getStatement() {
         return statement;
     }

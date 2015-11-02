@@ -1,10 +1,7 @@
 package sqstats.rs.reports.raw;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -27,23 +24,28 @@ public class ReportService {
         return reports;
     }
 
-    public RawXmlReport getRawXmlReport(String name) {
-        return reports.get(name);
-   }
+    public RawXmlReport getRawXmlReport(String name) throws SQLException {
+        return getRawXmlReport(name, System.lineSeparator());
+    }
+
+    public RawXmlReport getRawXmlReport(String name, String lineSeparator) throws SQLException {
+        RawXmlReport result = reports.get(name);
+        if (result != null) {
+            result.setDataSource(dataSource);
+            result.setLineSeparator(lineSeparator);
+        }
+        return result;
+    }
 
     @PostConstruct
     private void init() {
-        try (Connection conn = dataSource.getConnection()) {
+        try {
 
             //TODO: check&create reports metafile in reports dir, for loading reports list
             RawXmlReport report = new RawXmlReport();
-
-            PreparedStatement ps = conn.prepareStatement("select * from v_test");
-            report.setStatement(ps);
-
             ReportMeta meta = new ReportMeta();
-            meta.setName("v_test");
-            meta.setStatement("select * from v_test");
+            meta.setName("vr_xml_day_sums");
+            meta.setStatement("select * from vr_xml_day_sums");
             report.setMeta(meta);
 
             reports.put(meta.getName(), report);
