@@ -3,10 +3,12 @@ package sqstats.rs.reports.raw;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ServiceLoader;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.sql.DataSource;
+import sqstats.rs.reports.raw.meta.IReportMetaLoader;
 import sqstats.rs.reports.xml.ReportMeta;
 
 /**
@@ -14,6 +16,8 @@ import sqstats.rs.reports.xml.ReportMeta;
  */
 @Singleton
 public class ReportService {
+
+    
 
     @Resource(lookup = "java:jboss/datasources/sqstatsDS")
     DataSource dataSource;
@@ -41,15 +45,21 @@ public class ReportService {
     private void init() {
         try {
 
-            //TODO: check&create reports metafile in reports dir, for loading reports list
-            RawXmlReport report = new RawXmlReport();
-            ReportMeta meta = new ReportMeta();
-            meta.setName("vr_xml_day_sums");
-            meta.setStatement("select * from vr_xml_day_sums");
-            report.setMeta(meta);
+            ServiceLoader<IReportMetaLoader> sl
+                    = ServiceLoader.load(IReportMetaLoader.class);
 
-            reports.put(meta.getName(), report);
+            for (IReportMetaLoader rml : sl) {
 
+                rml.init();
+
+                for (ReportMeta rmeta : rml.getReportMetas()) {
+                    RawXmlReport report = new RawXmlReport();
+                    report.setMeta(rmeta);
+                    reports.put(rmeta.getName(), report);
+                }
+
+            }
+           
         } catch (Exception e) {
             throw new RuntimeException("error while initializing report service");
         }

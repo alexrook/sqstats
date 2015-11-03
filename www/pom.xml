@@ -30,12 +30,23 @@
     
     <build>
         <finalName>sqstats</finalName>
+      
         <filters>
             <filter>local.properties</filter>
         </filters>
+        
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        
         <plugins>
+            
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
@@ -44,6 +55,7 @@
             
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
                 <configuration>
                     <webResources>
                         <resource>
