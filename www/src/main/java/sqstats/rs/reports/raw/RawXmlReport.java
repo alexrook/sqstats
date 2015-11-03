@@ -95,10 +95,10 @@ public class RawXmlReport implements StreamingOutput {
             startTag(w, "column", columnAttrs);
 
             rs.first();
-            while (rs.next()) {
+            do {
 
                 w.append(getLineSeparator());
-                
+
                 Reader r = rs.getSQLXML(columnName).getCharacterStream();
                 int c = r.read();
                 while (c != - 1) {
@@ -106,7 +106,7 @@ public class RawXmlReport implements StreamingOutput {
                     c = r.read();
                 }
 
-            }
+            } while (rs.next());
 
             endTag(w, "column");
         } catch (IOException ex) {
@@ -159,9 +159,9 @@ public class RawXmlReport implements StreamingOutput {
         return w;
 
     }
-    
+
     private Writer startTag(Writer w, String tagName) throws IOException {
-        return startTag(w, tagName,null);
+        return startTag(w, tagName, null);
     }
 
     private Writer endTag(Writer w, String tagName) throws IOException {
