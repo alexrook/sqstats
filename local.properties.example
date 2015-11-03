@@ -3,3 +3,6 @@ db.username=syslog
 db.password=xxx
 db.name=syslog-squid-db
 squid.syslog.facility=local3
+reports.dir=/tmp/reports
+reports.db.file=reports.db
+
