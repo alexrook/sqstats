@@ -12,6 +12,8 @@ public interface IReportMetaLoader {
         void init() throws IOException;
 
         List<ReportMeta> getReportMetas() throws IOException;
+        
+        boolean hasChanges();
   
     
 }

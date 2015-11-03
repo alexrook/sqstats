@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.Writer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.sql.DataSource;
@@ -23,7 +25,7 @@ import sqstats.rs.reports.xml.ReportMeta;
 /**
  * @author moroz
  */
-public class RawXmlReport implements StreamingOutput {
+public class RawXmlReport implements StreamingOutput,Serializable {
 
     public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
@@ -120,6 +122,9 @@ public class RawXmlReport implements StreamingOutput {
             Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            
+            getMeta().setGenDate(new Date());
+            
             marshaller.marshal(getMeta(), w);
         } catch (JAXBException ex) {
             throw new WebApplicationException(ex);

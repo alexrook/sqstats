@@ -1,5 +1,6 @@
 package sqstats.rs.reports.xml;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author moroz
  */
 @XmlRootElement(name = "meta")
-public class ReportMeta {
+public class ReportMeta implements Serializable{
 
     private String statement, name;
     private Date genDate;

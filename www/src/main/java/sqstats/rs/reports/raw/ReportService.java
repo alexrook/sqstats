@@ -17,10 +17,10 @@ import sqstats.rs.reports.xml.ReportMeta;
 @Singleton
 public class ReportService {
 
-    
-
     @Resource(lookup = "java:jboss/datasources/sqstatsDS")
     DataSource dataSource;
+
+    ServiceLoader<IReportMetaLoader> slReportMetaLoader;
 
     private final Map<String, RawXmlReport> reports = new HashMap<>(12);
 
@@ -33,6 +33,13 @@ public class ReportService {
     }
 
     public RawXmlReport getRawXmlReport(String name, String lineSeparator) throws SQLException {
+
+        for (IReportMetaLoader rml : slReportMetaLoader) {
+            if (rml.hasChanges()) {
+                init();
+            }
+        }
+
         RawXmlReport result = reports.get(name);
         if (result != null) {
             result.setDataSource(dataSource);
@@ -45,10 +52,10 @@ public class ReportService {
     private void init() {
         try {
 
-            ServiceLoader<IReportMetaLoader> sl
+            slReportMetaLoader
                     = ServiceLoader.load(IReportMetaLoader.class);
 
-            for (IReportMetaLoader rml : sl) {
+            for (IReportMetaLoader rml : slReportMetaLoader) {
 
                 rml.init();
 
@@ -59,7 +66,7 @@ public class ReportService {
                 }
 
             }
-           
+
         } catch (Exception e) {
             throw new RuntimeException("error while initializing report service");
         }

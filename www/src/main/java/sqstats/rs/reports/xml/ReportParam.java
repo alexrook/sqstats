@@ -1,12 +1,13 @@
 package sqstats.rs.reports.xml;
 
+import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author moroz
  */
 @XmlRootElement(name = "param")
-public class ReportParam {
+public class ReportParam implements Serializable{
     
     private String name;
     private int posInStmt=1,sqlTypeNum;
