@@ -21,6 +21,7 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
     public static final String REPORT_TXT_EXT = ".rpt.txt",
             REPORT_KEY_SQL = "report.sql",
             REPORT_KEY_NAME = "report.name",
+            REPORT_KEY_DESC = "report.desc",
             REPORT_KEY_PARAM = "report.param",
             REPORT_KEY_PARAM_SUFFIX_INDEX = "index",
             REPORT_KEY_PARAM_SUFFIX_TYPE = "sqltype";
@@ -67,30 +68,31 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
     private ReportMeta parseFile(File file) throws IOException {
         Properties props = new Properties();
         props.load(new FileInputStream(file));
-        ReportMeta result = new ReportMeta();
-        result.setName(props.getProperty(REPORT_KEY_NAME));
-        result.setStatement(props.getProperty(REPORT_KEY_SQL));
-        HashMap<Integer, ReportParam> params = new HashMap<>(3);
-        Set<String> paramKeys = Utils.getOtherHierPropKeySet(REPORT_KEY_PARAM, props);
-        for (String key : paramKeys) {
-            ReportParam param = new ReportParam();
-            String name = key.substring(REPORT_KEY_PARAM.length() + 1,
-                    key.indexOf(".", REPORT_KEY_PARAM.length() + 1));
-            int paramIndex = Integer.parseInt(
-                    props.getProperty(REPORT_KEY_PARAM
-                            + "." + name + "."
-                            + REPORT_KEY_PARAM_SUFFIX_INDEX));
-            int paramSqlType = Integer.parseInt(
-                    props.getProperty(REPORT_KEY_PARAM
-                            + "." + name + "."
-                            + REPORT_KEY_PARAM_SUFFIX_TYPE));
-            if (!params.containsKey(paramIndex)) {
-                param.setName(name);
-                param.setPosInStmt(paramIndex);
-                param.setSqlTypeNum(paramSqlType);
-                params.put(paramIndex, param);
-            }
 
+        ReportMeta result = new ReportMeta();
+        result.setName(Utils.tryProperty(REPORT_KEY_NAME, props));
+        result.setStatement(Utils.tryProperty(REPORT_KEY_SQL, props));
+        result.setDescription(props.getProperty(REPORT_KEY_DESC));
+
+        HashMap<Integer, ReportParam> params = new HashMap<>(3);
+        Set<String> paramNames = Utils.getOtherNextPropKeyFragment(REPORT_KEY_PARAM, props);
+        for (String name : paramNames) {
+            ReportParam param = new ReportParam();
+
+            int paramIndex = Integer.parseInt(
+                    Utils.tryProperty( //index and sqltype for param must be in rpt.txt file
+                            Utils.createKey(REPORT_KEY_PARAM, name, REPORT_KEY_PARAM_SUFFIX_INDEX), props
+                    ));
+
+            int paramSqlType = Integer.parseInt(
+                    Utils.tryProperty(
+                            Utils.createKey(REPORT_KEY_PARAM, name, REPORT_KEY_PARAM_SUFFIX_TYPE), props
+                    ));
+
+            param.setName(name);
+            param.setPosInStmt(paramIndex);
+            param.setSqlTypeNum(paramSqlType);
+            params.put(paramIndex, param);
         }
         result.setParams(params);
         return result;
