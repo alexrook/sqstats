@@ -4,7 +4,7 @@
 
 
 /*итоги за день */
-drop /*MATERIALIZED*/ view if exists vr_day_sums;
+drop /*MATERIALIZED*/ view if exists vr_day_sums cascade;
 create or replace /*MATERIALIZED*/ view vr_day_sums
 as
 select date_trunc('day',request_date) as day,/* дата */
@@ -13,10 +13,14 @@ select date_trunc('day',request_date) as day,/* дата */
 	count(client_host) as conn_count /*всего соединений за один день*/
     from squidevents group by day;
 
-
+---xml version for reserch purpose
+drop view if exists vr_xml_day_sums ;
+create or replace view vr_xml_day_sums
+as
+select a.*,xmlforest(xmlforest(a.day,a.duration,a.bytes,a.conn_count) as row) from vr_day_sums a;
 
 /*итоги за день по клиентам*/
-drop /*MATERIALIZED*/ view if exists vr_day_sums_client ;
+drop /*MATERIALIZED*/ view if exists vr_day_sums_client cascade;
 create or replace /*MATERIALIZED*/ view vr_day_sums_client
 as 
 select day,
@@ -35,7 +39,14 @@ from
     clienthost b
     where a.client_host=b.id;
 
---todo: month year
+---xml version
+drop view if exists vr_xml_day_sums_client cascade;
+create or replace view vr_xml_day_sums_client
+as
+select a.*,xmlforest(xmlforest(a.day,a.address,a.name,a.description,a.duration,a.bytes,a.conn_count) as row)
+        from vr_day_sums_client a;
+
+--todo: week month
 
 /* select method,(select regexp_matches(url,'^(https?:\/\/)?(www\.)?([a-zA-Z0-9\.\-\_]*)')) 
     from squid_events where id>87000; */
@@ -67,7 +78,7 @@ $$
 language plpgsql;
 
 /*итоги за день по клиентам и сайтам*/
-drop /*MATERIALIZED*/ view if exists vr_day_sums_client_site ;
+drop /*MATERIALIZED*/ view if exists vr_day_sums_client_site cascade;
 create or replace /*MATERIALIZED*/ view vr_day_sums_client_site
 as
 select day,
@@ -87,8 +98,16 @@ from
     clienthost b
     where b.id=a.client_host;
 
+---xml version
+drop view if exists vr_xml_day_sums_client_site;
+create or replace view vr_xml_day_sums_client_site
+as
+select a.*,xmlforest(xmlforest(a.day,a.address,a.name,a.description,a.site,a.duration,a.bytes,a.conn_count) as row)
+        from vr_day_sums_client_site a;
+
+
 /*итоги за день по сайтам*/
-drop /*MATERIALIZED*/ view if exists vr_day_sums_site ;
+drop /*MATERIALIZED*/ view if exists vr_day_sums_site cascade;
 create or replace /*MATERIALIZED*/ view vr_day_sums_site
 as
 select  date_trunc('day',request_date) as day,/* дата */
@@ -98,6 +117,12 @@ select  date_trunc('day',request_date) as day,/* дата */
 	count(client_host) as conn_count /*всего соединений за день для определенного сайта*/
     from squidevents group by day,site;
 
+---xml version
+drop view if exists vr_xml_day_sums_site;
+create or replace view vr_xml_day_sums_site
+as
+select a.*,xmlforest(xmlforest(a.day,a.site,a.duration,a.bytes,a.conn_count) as row)
+        from vr_day_sums_site a;
 
 
 
