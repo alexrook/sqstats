@@ -10,10 +10,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author moroz
  */
 @XmlRootElement(name = "meta")
-public class ReportMeta implements Serializable{
+public class ReportMeta implements Serializable {
 
-    private String statement, name,description;
+    private String statement, name, description;
     private Date genDate;
+
+    private ReportError error=null;
 
     private Map<Integer, ReportParam> params = new HashMap<>(3);
 
@@ -25,7 +27,14 @@ public class ReportMeta implements Serializable{
         this.genDate = genDate;
     }
 
-    
+    public ReportError getError() {
+        return error;
+    }
+
+    public void setError(ReportError error) {
+        this.error = error;
+    }
+
     public String getStatement() {
         return statement;
     }
@@ -49,7 +58,6 @@ public class ReportMeta implements Serializable{
     public void setDescription(String description) {
         this.description = description;
     }
-    
 
     public Map<Integer, ReportParam> getParams() {
         return params;

@@ -16,16 +16,24 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.sql.DataSource;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import sqstats.rs.reports.xml.ReportError;
 import sqstats.rs.reports.xml.ReportMeta;
 
 /**
  * @author moroz
  */
-public class RawXmlReport implements StreamingOutput,Serializable {
+@XmlRootElement(name = "raw-xml-report")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class RawXmlReport implements StreamingOutput, Serializable {
 
     public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
@@ -34,7 +42,12 @@ public class RawXmlReport implements StreamingOutput,Serializable {
     private String lineSeparator;
     private ReportMeta meta;
 
+    @XmlTransient
     private DataSource dataSource;
+
+    public boolean isValid() {
+        return (meta != null) && (meta.getError() == null);
+    }
 
     public String getLineSeparator() {
         return lineSeparator;
@@ -63,28 +76,46 @@ public class RawXmlReport implements StreamingOutput,Serializable {
     @Override
     public void write(OutputStream output) throws IOException, WebApplicationException {
 
-        try (Connection conn = dataSource.getConnection();
-                PreparedStatement statement = conn.prepareStatement(getMeta().getStatement(),
-                        ResultSet.TYPE_SCROLL_INSENSITIVE,
-                        ResultSet.CONCUR_READ_ONLY);
-                Writer w = new OutputStreamWriter(output)) {
+        if (this.isValid()) {
+            try (Connection conn = dataSource.getConnection();
+                    PreparedStatement statement = conn.prepareStatement(getMeta().getStatement(),
+                            ResultSet.TYPE_SCROLL_INSENSITIVE,
+                            ResultSet.CONCUR_READ_ONLY);) {
 
-            ResultSet rs = statement.executeQuery();
-            writeHeader(w);
-            writeMeta(w);
-            startTag(w, "resultset");
-            int cc = statement.getMetaData().getColumnCount();
-            for (int i = 1; i < cc + 1; i++) {
-                int columntType = statement.getMetaData().getColumnType(i);
-                if (columntType == Types.SQLXML) {
-                    writeXmlField(rs, w, statement.getMetaData().getColumnName(i));
+                ResultSet rs;
+                try {
+                    rs = statement.executeQuery();
+
+                    try (Writer w = new OutputStreamWriter(output)) {
+                        writeHeader(w);
+                        writeMeta(w);
+                        startTag(w, "resultset");
+                        int cc = statement.getMetaData().getColumnCount();
+                        for (int i = 1; i < cc + 1; i++) {
+                            int columntType = statement.getMetaData().getColumnType(i);
+                            if (columntType == Types.SQLXML) {
+                                writeXmlField(rs, w, statement.getMetaData().getColumnName(i));
+                            }
+                        }
+                        endTag(w, "resultset");
+                        writeFooter(w);
+                    }
+
+                } catch (SQLException e) {
+                    this.meta.setError(new ReportError(e, e.getMessage()));
+                    throw new WebApplicationException(Response.serverError().entity(this).build());
                 }
+            } catch (SQLException ex) {
+                throw new WebApplicationException(ex);
             }
-            endTag(w, "resultset");
-            writeFooter(w);
+        } else {
+            try (Writer w = new OutputStreamWriter(output)) {
+                writeHeader(w);
+                writeMeta(w);
+                writeFooter(w);
+            }
+            throw new IOException(meta.getError().getCause());
 
-        } catch (Exception ex) {
-            throw new WebApplicationException(ex);
         }
 
     }
@@ -122,10 +153,11 @@ public class RawXmlReport implements StreamingOutput,Serializable {
             Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            
+
             getMeta().setGenDate(new Date());
-            
+
             marshaller.marshal(getMeta(), w);
+
         } catch (JAXBException ex) {
             throw new WebApplicationException(ex);
         }

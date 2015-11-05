@@ -1,16 +1,18 @@
 package sqstats.rs.reports.raw;
 
-import java.sql.SQLException;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import sqstats.rs.AbstractRS;
+import sqstats.rs.reports.xml.ReportError;
 
 /**
  * @author moroz
@@ -22,10 +24,10 @@ public class RawReportsRS extends AbstractRS {
     ReportService reportService;
 
     @GET
-    @Path("{name:\\d+}")
-    public Response testGet(@PathParam("name") int name, @Context HttpHeaders headers) {
-
-        return Response.ok(headers.getRequestHeaders()).build();
+    @Path("errors")
+    @Produces(MediaType.APPLICATION_XML)
+    public Map<Integer, ReportError> getErrors() {
+        return reportService.getErrors();
     }
 
     @GET
@@ -34,23 +36,30 @@ public class RawReportsRS extends AbstractRS {
     public Response getReportForName(@PathParam("name") String name, @Context HttpHeaders headers) {
 
         RawXmlReport rawReport;
-        try {
-            rawReport = reportService.getRawXmlReport(name);
-            if (rawReport != null) {
-                return Response.ok(rawReport).build();
-            } else {
-                return Response.status(Response.Status.NOT_FOUND).build();
-            }
 
-        } catch (SQLException ex) {
-            return Response.serverError().entity(ex).build();
+        rawReport = reportService.getRawXmlReport(name);
+        if (rawReport != null) {
+            if (rawReport.isValid()) {
+                try {
+                    return Response.ok(rawReport).build();
+                } catch (Exception e) {
+                    reportService.addError(new ReportError(e, e.getMessage()));
+                    throw e;
+                }
+            } else {
+                return Response.serverError().entity(rawReport).build();
+            }
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
 
     }
 
     @GET
-    public Response testGet1() {
-        return Response.ok().build();
+    @Path("reports")
+    @Produces(MediaType.APPLICATION_XML)
+    public Map<String, RawXmlReport> getRawReportList() {
+        return reportService.getReports();
     }
 
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import sqstats.rs.Utils;
+import sqstats.rs.reports.xml.ReportError;
 import sqstats.rs.reports.xml.ReportMeta;
 import sqstats.rs.reports.xml.ReportParam;
 
@@ -27,6 +28,8 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
             REPORT_KEY_PARAM_SUFFIX_TYPE = "sqltype";
 
     String reportDir, reportsDb;
+
+    private List<ReportError> reportErrors;
 
     @Override
     public void init() throws IOException {
@@ -66,35 +69,42 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
     }
 
     private ReportMeta parseFile(File file) throws IOException {
-        Properties props = new Properties();
-        props.load(new FileInputStream(file));
 
         ReportMeta result = new ReportMeta();
-        result.setName(Utils.tryProperty(REPORT_KEY_NAME, props));
-        result.setStatement(Utils.tryProperty(REPORT_KEY_SQL, props));
-        result.setDescription(props.getProperty(REPORT_KEY_DESC));
+        Properties props = new Properties();
+        try {
+            props.load(new FileInputStream(file));
 
-        HashMap<Integer, ReportParam> params = new HashMap<>(3);
-        Set<String> paramNames = Utils.getOtherNextPropKeyFragment(REPORT_KEY_PARAM, props);
-        for (String name : paramNames) {
-            ReportParam param = new ReportParam();
+            result.setName(Utils.tryProperty(REPORT_KEY_NAME, props));
+            result.setStatement(Utils.tryProperty(REPORT_KEY_SQL, props));// try or get prop ?
+            result.setDescription(props.getProperty(REPORT_KEY_DESC));
 
-            int paramIndex = Integer.parseInt(
-                    Utils.tryProperty( //index and sqltype for param must be in rpt.txt file
-                            Utils.createKey(REPORT_KEY_PARAM, name, REPORT_KEY_PARAM_SUFFIX_INDEX), props
-                    ));
+            HashMap<Integer, ReportParam> params = new HashMap<>(3);
+            Set<String> paramNames = Utils.getOtherNextPropKeyFragment(REPORT_KEY_PARAM, props);
+            for (String name : paramNames) {
+                ReportParam param = new ReportParam();
 
-            int paramSqlType = Integer.parseInt(
-                    Utils.tryProperty(
-                            Utils.createKey(REPORT_KEY_PARAM, name, REPORT_KEY_PARAM_SUFFIX_TYPE), props
-                    ));
+                int paramIndex = Integer.parseInt(
+                        Utils.tryProperty( //index and sqltype for param must be in rpt.txt file
+                                Utils.createKey(REPORT_KEY_PARAM, name, REPORT_KEY_PARAM_SUFFIX_INDEX), props
+                        ));
 
-            param.setName(name);
-            param.setPosInStmt(paramIndex);
-            param.setSqlTypeNum(paramSqlType);
-            params.put(paramIndex, param);
-        }
-        result.setParams(params);
+                int paramSqlType = Integer.parseInt(
+                        Utils.tryProperty(
+                                Utils.createKey(REPORT_KEY_PARAM, name, REPORT_KEY_PARAM_SUFFIX_TYPE), props
+                        ));
+
+                param.setName(name);
+                param.setPosInStmt(paramIndex);
+                param.setSqlTypeNum(paramSqlType);
+                params.put(paramIndex, param);
+            }
+            result.setParams(params);
+        } catch (IOException e) {
+            ReportError re = new ReportError(e, e.getMessage());
+            result.setError(re);
+            addReportError(re);
+        } 
         return result;
     }
 
@@ -107,6 +117,17 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
     public boolean hasChanges() {
         File dbFile = new File(new File(reportDir), reportsDb);
         return !dbFile.exists();
+    }
+
+    private void addReportError(ReportError error) {
+        reportErrors = (reportErrors == null) ? new ArrayList<ReportError>(12) : reportErrors;
+        reportErrors.add(error);
+
+    }
+
+    @Override
+    public List<ReportError> getReportErrors() {
+        return reportErrors;
     }
 
 }
