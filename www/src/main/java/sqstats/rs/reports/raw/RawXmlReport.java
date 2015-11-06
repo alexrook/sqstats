@@ -11,8 +11,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
 import javax.ws.rs.WebApplicationException;
@@ -35,6 +37,11 @@ import sqstats.rs.reports.xml.ReportMeta;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RawXmlReport implements StreamingOutput, Serializable {
 
+    public static interface IRawXmlReportEventListener {
+
+        void onError(String name, Exception e);
+    }
+
     public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
     public static final String RAW_REPORT_TAG = "report";
@@ -44,6 +51,13 @@ public class RawXmlReport implements StreamingOutput, Serializable {
 
     @XmlTransient
     private DataSource dataSource;
+
+    @XmlTransient
+    private final List<IRawXmlReportEventListener> listeners = new ArrayList<>(1);
+
+    public void addListener(IRawXmlReportEventListener listener) {
+        listeners.add(listener);
+    }
 
     public boolean isValid() {
         return (meta != null) && (meta.getError() == null);
@@ -77,77 +91,90 @@ public class RawXmlReport implements StreamingOutput, Serializable {
     public void write(OutputStream output) throws IOException, WebApplicationException {
 
         if (this.isValid()) {
-            try (Connection conn = dataSource.getConnection();
-                    PreparedStatement statement = conn.prepareStatement(getMeta().getStatement(),
-                            ResultSet.TYPE_SCROLL_INSENSITIVE,
-                            ResultSet.CONCUR_READ_ONLY);) {
 
-                ResultSet rs;
-                try {
-                    rs = statement.executeQuery();
+            try (Connection conn = dataSource.getConnection()) {
+
+                try (PreparedStatement statement = conn.prepareStatement(getMeta().getStatement(),
+                        ResultSet.TYPE_SCROLL_INSENSITIVE,
+                        ResultSet.CONCUR_READ_ONLY);
+                        ResultSet rs = statement.executeQuery();) {
 
                     try (Writer w = new OutputStreamWriter(output)) {
+
                         writeHeader(w);
                         writeMeta(w);
-                        startTag(w, "resultset");
-                        int cc = statement.getMetaData().getColumnCount();
-                        for (int i = 1; i < cc + 1; i++) {
-                            int columntType = statement.getMetaData().getColumnType(i);
-                            if (columntType == Types.SQLXML) {
-                                writeXmlField(rs, w, statement.getMetaData().getColumnName(i));
-                            }
-                        }
-                        endTag(w, "resultset");
+                        writeResultSet(statement, rs, w);
                         writeFooter(w);
-                    }
 
+                    } catch (Exception e) {
+                        fireError(e);
+                        throw new WebApplicationException(Response.serverError().entity(e).build());
+                    }
+                    
                 } catch (SQLException e) {
                     this.meta.setError(new ReportError(e, e.getMessage()));
+                    fireError(e);
                     throw new WebApplicationException(Response.serverError().entity(this).build());
                 }
-            } catch (SQLException ex) {
-                throw new WebApplicationException(ex);
+
+            } catch (SQLException e) {
+                fireError(e);
+                throw new WebApplicationException(Response.serverError().entity(e).build());
             }
+
         } else {
             try (Writer w = new OutputStreamWriter(output)) {
                 writeHeader(w);
                 writeMeta(w);
                 writeFooter(w);
             }
-            throw new IOException(meta.getError().getCause());
 
         }
+
+    }
+
+    private void writeResultSet(PreparedStatement statement,
+            ResultSet rs, Writer w) throws IOException, SQLException {
+
+        startTag(w, "resultset");
+        int cc = statement.getMetaData().getColumnCount();
+        for (int i = 1; i < cc + 1; i++) {
+            int columntType = statement.getMetaData().getColumnType(i);
+            if (columntType == Types.SQLXML) {
+                writeXmlField(rs, w, statement.getMetaData().getColumnName(i));
+            }
+        }
+        endTag(w, "resultset");
 
     }
 
     private void writeXmlField(ResultSet rs, Writer w,
-            String columnName) throws SQLException {
-        try {
-            HashMap<String, String> columnAttrs = new HashMap();
-            columnAttrs.put("name", columnName);
-            startTag(w, "column", columnAttrs);
+            String columnName) throws IOException, SQLException {
 
-            rs.first();
-            do {
+        HashMap<String, String> columnAttrs = new HashMap();
+        columnAttrs.put("name", columnName);
 
-                w.append(getLineSeparator());
+        startTag(w, "column", columnAttrs);
 
-                Reader r = rs.getSQLXML(columnName).getCharacterStream();
-                int c = r.read();
-                while (c != - 1) {
-                    w.append((char) c);
-                    c = r.read();
-                }
+        rs.first();
+        do {
 
-            } while (rs.next());
+            w.append(getLineSeparator());
 
-            endTag(w, "column");
-        } catch (IOException ex) {
-            throw new SQLException(ex);
-        }
+            Reader r = rs.getSQLXML(columnName).getCharacterStream();
+            int c = r.read();
+            while (c != - 1) {
+                w.append((char) c);
+                c = r.read();
+            }
+
+        } while (rs.next());
+
+        endTag(w, "column");
+
     }
 
-    private void writeMeta(Writer w) throws WebApplicationException {
+    private void writeMeta(Writer w) throws IOException {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(ReportMeta.class);
             Marshaller marshaller = jaxbContext.createMarshaller();
@@ -159,7 +186,7 @@ public class RawXmlReport implements StreamingOutput, Serializable {
             marshaller.marshal(getMeta(), w);
 
         } catch (JAXBException ex) {
-            throw new WebApplicationException(ex);
+            throw new IOException(ex);
         }
 
     }
@@ -208,4 +235,9 @@ public class RawXmlReport implements StreamingOutput, Serializable {
         return w;
     }
 
+    private void fireError(Exception e) {
+        for (IRawXmlReportEventListener listener : listeners) {
+            listener.onError(this.meta.getName(), e);
+        }
+    }
 }

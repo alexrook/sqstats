@@ -26,7 +26,7 @@ public class RawReportsRS extends AbstractRS {
     @GET
     @Path("errors")
     @Produces(MediaType.APPLICATION_XML)
-    public Map<Integer, ReportError> getErrors() {
+    public Map<String, ReportError> getErrors() {
         return reportService.getErrors();
     }
 
@@ -39,16 +39,7 @@ public class RawReportsRS extends AbstractRS {
 
         rawReport = reportService.getRawXmlReport(name);
         if (rawReport != null) {
-            if (rawReport.isValid()) {
-                try {
-                    return Response.ok(rawReport).build();
-                } catch (Exception e) {
-                    reportService.addError(new ReportError(e, e.getMessage()));
-                    throw e;
-                }
-            } else {
-                return Response.serverError().entity(rawReport).build();
-            }
+                   return Response.ok(rawReport).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

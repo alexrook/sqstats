@@ -1,7 +1,6 @@
 package sqstats.rs.reports.raw;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import javax.annotation.PostConstruct;
@@ -18,25 +17,55 @@ import sqstats.rs.reports.xml.ReportMeta;
 @Singleton
 public class ReportService {
 
+    public static class MapErrorStorage
+            implements IReportMetaLoader.IReportErrorStorage,
+            RawXmlReport.IRawXmlReportEventListener {
+
+        private final Map<String, ReportError> storage = new HashMap<>(3);
+
+        @Override
+        public void addError(String name, ReportError error) {
+            storage.put(name, error);
+        }
+
+        @Override
+        public ReportError getError(String name) {
+            return storage.get(name);
+        }
+
+        @Override
+        public Map<String, ReportError> getErrorsMap() {
+            return storage;
+        }
+
+        @Override
+        public void onError(String name, Exception e) {
+            this.addError(name, new ReportError(e, e.getMessage()));
+        }
+
+        @Override
+        public void clear() {
+            storage.clear();
+        }
+
+    }
     @Resource(lookup = "java:jboss/datasources/sqstatsDS")
     DataSource dataSource;
 
     ServiceLoader<IReportMetaLoader> slReportMetaLoader;
 
     private final Map<String, RawXmlReport> reports = new HashMap<>(12);
-    private final Map<Integer, ReportError> reportErrors = new HashMap<>(3);
-    
-    int errCounter=0;
+    private final MapErrorStorage reportErrors = new MapErrorStorage();
 
-    public Map<Integer, ReportError> getErrors() {
-        return reportErrors;
+    public Map<String, ReportError> getErrors() {
+        return reportErrors.getErrorsMap();
     }
 
     public Map<String, RawXmlReport> getReports() {
         return reports;
     }
 
-    public RawXmlReport getRawXmlReport(String name)  {
+    public RawXmlReport getRawXmlReport(String name) {
         return getRawXmlReport(name, System.lineSeparator());
     }
 
@@ -56,11 +85,11 @@ public class ReportService {
         return result;
     }
 
-    public void addError(ReportError re){
-       reportErrors.put(errCounter, re);
-       errCounter++;
+    public void addError(String name, ReportError re) {
+        reportErrors.addError(name, re);
+
     }
-    
+
     @PostConstruct
     private void init() {
         try {
@@ -68,23 +97,17 @@ public class ReportService {
             slReportMetaLoader
                     = ServiceLoader.load(IReportMetaLoader.class);
 
-          
+            reportErrors.clear();
+            
             for (IReportMetaLoader rml : slReportMetaLoader) {
 
-                rml.init();
+                rml.init(reportErrors);
 
                 for (ReportMeta rmeta : rml.getReportMetas()) {
                     RawXmlReport report = new RawXmlReport();
                     report.setMeta(rmeta);
+                    report.addListener(reportErrors);
                     reports.put(rmeta.getName(), report);
-                }
-
-                List<ReportError> rmlErr = rml.getReportErrors();
-                if (rmlErr != null) {
-                    for (ReportError re : rmlErr) {
-                        reportErrors.put(errCounter, re);
-                    }
-                    errCounter++;
                 }
 
             }

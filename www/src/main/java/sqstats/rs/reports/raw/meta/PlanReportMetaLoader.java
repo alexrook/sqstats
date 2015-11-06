@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import sqstats.rs.Utils;
@@ -29,10 +30,11 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
 
     String reportDir, reportsDb;
 
-    private List<ReportError> reportErrors;
+    private IReportErrorStorage errorsStorage;
 
     @Override
-    public void init() throws IOException {
+    public void init(IReportErrorStorage errorsStorage) throws IOException {
+        this.errorsStorage = errorsStorage;
         reportDir = Utils.getProperty("reports.dir");
         reportsDb = Utils.getProperty("reports.db.file");
     }
@@ -70,12 +72,14 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
 
     private ReportMeta parseFile(File file) throws IOException {
 
+        String reportName="";
         ReportMeta result = new ReportMeta();
         Properties props = new Properties();
         try {
             props.load(new FileInputStream(file));
 
-            result.setName(Utils.tryProperty(REPORT_KEY_NAME, props));
+            reportName = Utils.tryProperty(REPORT_KEY_NAME, props);
+            result.setName(reportName);
             result.setStatement(Utils.tryProperty(REPORT_KEY_SQL, props));// try or get prop ?
             result.setDescription(props.getProperty(REPORT_KEY_DESC));
 
@@ -101,10 +105,14 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
             }
             result.setParams(params);
         } catch (IOException e) {
+            
+            String name=reportName.length()>0?reportName:file.getName();//имя может быть ошибочно пропущено in rpt.txt file
+            result.setName(reportName);
             ReportError re = new ReportError(e, e.getMessage());
             result.setError(re);
-            addReportError(re);
-        } 
+            addReportError(name,re);
+            
+        }
         return result;
     }
 
@@ -119,15 +127,15 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
         return !dbFile.exists();
     }
 
-    private void addReportError(ReportError error) {
-        reportErrors = (reportErrors == null) ? new ArrayList<ReportError>(12) : reportErrors;
-        reportErrors.add(error);
-
+    private void addReportError(String name, ReportError error) {
+        if (errorsStorage != null) {
+            errorsStorage.addError(name, error);
+        }
     }
 
     @Override
-    public List<ReportError> getReportErrors() {
-        return reportErrors;
+    public IReportErrorStorage getReportErrors() {
+        return errorsStorage;
     }
 
 }
