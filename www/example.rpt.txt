@@ -1,9 +1,0 @@
-report.name=one
-#only sqlxmltype fields appears in result xml
-report.sql=select xmlforest(now() as n)
-#params not implemented now
-report.param.one.index=1
-report.param.one.sqltype=2009
-report.param.two.index=2
-report.param.two.sqltype=2
-

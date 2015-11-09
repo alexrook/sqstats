@@ -6,13 +6,15 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import sqstats.rs.AbstractRS;
 import sqstats.rs.reports.xml.ReportError;
+import sqstats.rs.reports.xml.ReportMeta;
 
 /**
  * @author moroz
@@ -33,15 +35,34 @@ public class RawReportsRS extends AbstractRS {
     @GET
     @Path("{name:\\w+}")
     @Produces(MediaType.APPLICATION_XML)
-    public Response getReportForName(@PathParam("name") String name, @Context HttpHeaders headers) {
+    public Response getReportForName(@PathParam("name") String name,
+            @Context UriInfo uriInfo, @Context HttpHeaders headers) {
 
         RawXmlReport rawReport;
 
         rawReport = reportService.getRawXmlReport(name);
+
         if (rawReport != null) {
-                   return Response.ok(rawReport).build();
+
+            passReportParams(rawReport, uriInfo.getQueryParameters());
+
+            return Response.ok(rawReport).build();
+
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+    }
+
+    private void passReportParams(RawXmlReport report, MultivaluedMap<String, String> uriParams) {
+
+        ReportMeta meta = report.getMeta();
+
+        meta.clearParamsValues();
+
+        for (String key : uriParams.keySet()) {
+            //setParam ignores value if param not found in meta.params map
+            meta.setParam(key, uriParams.getFirst(key));
         }
 
     }

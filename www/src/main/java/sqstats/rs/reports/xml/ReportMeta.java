@@ -15,7 +15,7 @@ public class ReportMeta implements Serializable {
     private String statement, name, description;
     private Date genDate;
 
-    private ReportError error=null;
+    private ReportError error = null;
 
     private Map<Integer, ReportParam> params = new HashMap<>(3);
 
@@ -63,6 +63,12 @@ public class ReportMeta implements Serializable {
         return params;
     }
 
+    public void clearParamsValues() {
+       for (ReportParam param: params.values()) {
+           param.setValue(null);
+       }
+    }
+
     public void setParams(Map<Integer, ReportParam> params) {
         this.params = params;
     }
@@ -74,4 +80,25 @@ public class ReportMeta implements Serializable {
     public ReportParam getParam(Integer posInStmt) {
         return params.get(posInStmt);
     }
+
+    public ReportParam getParam(String name) {
+
+        ReportParam result = null;
+
+        for (int i : params.keySet()) {
+            if (params.get(i).getName().equalsIgnoreCase(name)) {
+                result = params.get(i);
+            }
+
+        }
+        return result;
+    }
+
+    public void setParam(String name, Object value) {
+        ReportParam param = getParam(name);
+        if (param != null) {
+            param.setValue(value);
+        }
+    }
+
 }

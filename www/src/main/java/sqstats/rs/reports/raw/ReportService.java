@@ -58,10 +58,16 @@ public class ReportService {
     private final MapErrorStorage reportErrors = new MapErrorStorage();
 
     public Map<String, ReportError> getErrors() {
+        
+        checkChanges();
+      
         return reportErrors.getErrorsMap();
     }
 
     public Map<String, RawXmlReport> getReports() {
+        
+        checkChanges();
+        
         return reports;
     }
 
@@ -71,11 +77,7 @@ public class ReportService {
 
     public RawXmlReport getRawXmlReport(String name, String lineSeparator) {
 
-        for (IReportMetaLoader rml : slReportMetaLoader) {
-            if (rml.hasChanges()) {
-                init();
-            }
-        }
+        checkChanges();
 
         RawXmlReport result = reports.get(name);
         if (result != null) {
@@ -98,7 +100,7 @@ public class ReportService {
                     = ServiceLoader.load(IReportMetaLoader.class);
 
             reportErrors.clear();
-            
+
             for (IReportMetaLoader rml : slReportMetaLoader) {
 
                 rml.init(reportErrors);
@@ -118,4 +120,11 @@ public class ReportService {
 
     }
 
+    private void checkChanges() {
+        for (IReportMetaLoader rml : slReportMetaLoader) {
+            if (rml.hasChanges()) {
+                init();
+            }
+        }
+    }
 }

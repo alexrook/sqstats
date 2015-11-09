@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import sqstats.rs.reports.xml.ReportError;
 import sqstats.rs.reports.xml.ReportMeta;
+import sqstats.rs.reports.xml.ReportParam;
 
 /**
  * @author moroz
@@ -96,21 +97,36 @@ public class RawXmlReport implements StreamingOutput, Serializable {
 
                 try (PreparedStatement statement = conn.prepareStatement(getMeta().getStatement(),
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
-                        ResultSet.CONCUR_READ_ONLY);
-                        ResultSet rs = statement.executeQuery();) {
+                        ResultSet.CONCUR_READ_ONLY);) {
 
-                    try (Writer w = new OutputStreamWriter(output)) {
+                    setStatementParams(statement);
 
-                        writeHeader(w);
-                        writeMeta(w);
-                        writeResultSet(statement, rs, w);
-                        writeFooter(w);
+                    try (ResultSet rs = statement.executeQuery();) {
 
-                    } catch (Exception e) {
+                        try (Writer w = new OutputStreamWriter(output)) {
+
+                            writeHeader(w);
+                            writeMeta(w);
+                            writeResultSet(statement, rs, w);
+                            writeFooter(w);
+
+                        } catch (Exception e) {
+                            fireError(e);
+                            throw new WebApplicationException(Response.serverError().entity(new ReportError(e,
+                                    e.getMessage())).build());
+                        }
+
+                    } catch (SQLException e) {
+                        this.meta.setError(new ReportError(e, e.getMessage()));
                         fireError(e);
-                        throw new WebApplicationException(Response.serverError().entity(e).build());
+                        throw new WebApplicationException(Response.serverError().entity(this).build());
                     }
-                    
+
+                } catch (IllegalAccessException e) {//неверно указаны параметы отчета в http-запросе
+                    fireError(e);
+                    throw new WebApplicationException(Response.serverError().entity(new ReportError(e,
+                            e.getMessage())).build());
+
                 } catch (SQLException e) {
                     this.meta.setError(new ReportError(e, e.getMessage()));
                     fireError(e);
@@ -119,7 +135,8 @@ public class RawXmlReport implements StreamingOutput, Serializable {
 
             } catch (SQLException e) {
                 fireError(e);
-                throw new WebApplicationException(Response.serverError().entity(e).build());
+                throw new WebApplicationException(Response.serverError().entity(new ReportError(e,
+                        e.getMessage())).build());
             }
 
         } else {
@@ -129,6 +146,15 @@ public class RawXmlReport implements StreamingOutput, Serializable {
                 writeFooter(w);
             }
 
+        }
+
+    }
+
+    private void setStatementParams(PreparedStatement statement) throws SQLException, IllegalAccessException {
+
+        for (Integer paramIndex : meta.getParams().keySet()) {
+            ReportParam param = meta.getParam(paramIndex);
+            statement.setObject(paramIndex, param.tryValue(), param.getSqlTypeNum());
         }
 
     }
