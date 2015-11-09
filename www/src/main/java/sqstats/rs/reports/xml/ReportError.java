@@ -1,6 +1,8 @@
 package sqstats.rs.reports.xml;
 
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -9,25 +11,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "error")
 public class ReportError implements Serializable {
 
-    private Exception cause;
-
     private String msg;
+
+    private String stackTrace;
 
     public ReportError() {
 
     }
 
     public ReportError(Exception e, String msg) {
-        this.cause = e;
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw));
+        this.stackTrace = sw.toString();
         this.msg = msg;
-    }
-
-    public Exception getCause() {
-        return cause;
-    }
-
-    public void setCause(Exception cause) {
-        this.cause = cause;
     }
 
     public String getMsg() {
@@ -38,4 +34,13 @@ public class ReportError implements Serializable {
         this.msg = msg;
     }
 
+    public String getStackTrace() {
+        return stackTrace;
+    }
+
+    public void setStackTrace(String stackTrace) {
+        this.stackTrace = stackTrace;
+    }
+
+    
 }
