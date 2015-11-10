@@ -48,7 +48,7 @@ public class ReportMeta implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name;
+           this.name = name;
     }
 
     public String getDescription() {

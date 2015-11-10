@@ -69,17 +69,17 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
 
     }
 
-    private ReportMeta parseFile(File file) throws IOException {
+    private ReportMeta parseFile(File file) {
 
-        String reportName="";
+        String reportName = "";
         ReportMeta result = new ReportMeta();
         Properties props = new Properties();
         try {
             props.load(new FileInputStream(file));
 
-            reportName = Utils.tryProperty(REPORT_KEY_NAME, props);
+            reportName = Utils.tryPropertyNotEmpty(REPORT_KEY_NAME, props);
             result.setName(reportName);
-            result.setStatement(Utils.tryProperty(REPORT_KEY_SQL, props));// try or get prop ?
+            result.setStatement(Utils.tryPropertyNotEmpty(REPORT_KEY_SQL, props));// try or get prop ?
             result.setDescription(props.getProperty(REPORT_KEY_DESC));
 
             HashMap<Integer, ReportParam> params = new HashMap<>(3);
@@ -88,12 +88,12 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
                 ReportParam param = new ReportParam();
 
                 int paramIndex = Integer.parseInt(
-                        Utils.tryProperty( //index and sqltype for param must be in rpt.txt file
+                        Utils.tryPropertyNotEmpty( //index and sqltype for param must be in rpt.txt file
                                 Utils.createKey(REPORT_KEY_PARAM, name, REPORT_KEY_PARAM_SUFFIX_INDEX), props
                         ));
 
                 int paramSqlType = Integer.parseInt(
-                        Utils.tryProperty(
+                        Utils.tryPropertyNotEmpty(
                                 Utils.createKey(REPORT_KEY_PARAM, name, REPORT_KEY_PARAM_SUFFIX_TYPE), props
                         ));
 
@@ -102,17 +102,21 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
                 param.setSqlTypeNum(paramSqlType);
                 params.put(paramIndex, param);
             }
-            result.setParams(params);
-        } catch (IOException e) {
             
-            String name=reportName.length()>0?reportName:file.getName();//имя может быть ошибочно пропущено in rpt.txt file
-            result.setName(reportName);
+            result.setParams(params);
+            
+        } catch (IOException e) {
+
+            String name = reportName.length() > 0 ? reportName : file.getName();//имя может быть ошибочно пропущено in rpt.txt file
+            result.setName(name);
             ReportError re = new ReportError(e, e.getMessage());
             result.setError(re);
-            addReportError(name,re);
-            
+            addReportError(name, re);
+
         }
+        
         return result;
+        
     }
 
     @Override

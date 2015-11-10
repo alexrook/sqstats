@@ -58,10 +58,10 @@ public class Utils {
         return getOtherBoolProperty(name, getInstance().data);
     }
 
-    public static String tryProperty(String name, Properties props) throws IOException{
-        
+    public static String tryProperty(String name, Properties props) throws IOException {
+
         String result = props.getProperty(name);
-        
+
         if (result != null) {
             return result;
         }
@@ -69,7 +69,19 @@ public class Utils {
         throw new IOException("property " + name + " not found");
     }
 
+    public static String tryPropertyNotEmpty(String name, Properties props) throws IOException {
+
+        String result = tryProperty(name, props);
+
+        if (result.length() > 0) {
+            return result;
+        }
+
+        throw new IOException("property " + name + " must be not empty");
+    }
+
     public static boolean getOtherBoolProperty(String name, Properties props) {
+
         String val = props.getProperty(name);
         boolean result = val != null ? val.matches("([Yy]es|[Tt]rue)") : false;
         return result;

@@ -125,7 +125,7 @@ public class RawXmlReport implements StreamingOutput, Serializable {
 
                 } catch (IllegalAccessException e) {//неверно указаны параметы отчета в http-запросе, информируем пользователя
                     fireError(e);
-                    throw new WebApplicationException(Response.serverError().entity(new ReportError(e,
+                    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(new ReportError(e,
                             e.getMessage())).build());
 
                 } catch (SQLException e) {//ошибка выполнения sql - значит он неверен, внести в мета

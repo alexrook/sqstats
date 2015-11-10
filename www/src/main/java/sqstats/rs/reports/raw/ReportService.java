@@ -1,6 +1,7 @@
 package sqstats.rs.reports.raw;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
 import javax.annotation.PostConstruct;
@@ -17,14 +18,23 @@ import sqstats.rs.reports.xml.ReportMeta;
 @Singleton
 public class ReportService {
 
+    public static final int MAX_ERRORS_SIZE = 7;
+
     public static class MapErrorStorage
             implements IReportMetaLoader.IReportErrorStorage,
             RawXmlReport.IRawXmlReportEventListener {
 
-        private final Map<String, ReportError> storage = new HashMap<>(3);
+        private final Map<String, ReportError> storage = new LinkedHashMap<String, ReportError>(MAX_ERRORS_SIZE) {
+
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<String, ReportError> eldest) {
+                return size() > MAX_ERRORS_SIZE;//simple LRU cache
+            }
+
+        };
 
         @Override
-        public void addError(String name, ReportError error) {
+        public synchronized void addError(String name, ReportError error) {
             storage.put(name, error);
         }
 
@@ -44,7 +54,7 @@ public class ReportService {
         }
 
         @Override
-        public void clear() {
+        public synchronized void clear() {
             storage.clear();
         }
 
@@ -58,16 +68,16 @@ public class ReportService {
     private final MapErrorStorage reportErrors = new MapErrorStorage();
 
     public Map<String, ReportError> getErrors() {
-        
+
         checkChanges();
-      
+
         return reportErrors.getErrorsMap();
     }
 
     public Map<String, RawXmlReport> getReports() {
-        
+
         checkChanges();
-        
+
         return reports;
     }
 
@@ -93,7 +103,7 @@ public class ReportService {
     }
 
     @PostConstruct
-    private void init() {
+    private synchronized void init() {
         try {
 
             slReportMetaLoader
