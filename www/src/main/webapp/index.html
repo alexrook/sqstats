@@ -1,9 +1,55 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-ng-app="sqstats">
     <head>
-        <title>Yes it works</title>
+        <title>Список отчетов статистики Squid</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" 
+              integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" 
+              crossorigin="anonymous">
+
+        <link href="css/appctl.css" rel="stylesheet">
+
+        <script type="text/javascript">
+            window.appdeb = {
+                urlprefix: ''
+            };
+        </script>
+
+        <!-- 
+            https://developers.google.com/speed/libraries/devguide 
+        -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
+
+        <script src="js/app.js"></script>
+        <script src="js/controllers.js"></script>
+
     </head>
-    <body>
-	<p>hello</p>
+
+    <body data-ng-controller="MainCtrl">
+
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#/about">Squid Stats</a>
+                </div>
+            </div>
+        </nav>
+
+        <div id="main" class="container">
+            <div class="row">
+                <div data-ng-view></div>
+            </div>
+        </div> <!-- //main -->
+
+        <hr/>
+
+        <footer>2015 IT Dept</footer>
+
     </body>
 </html>

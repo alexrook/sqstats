@@ -1,0 +1,6 @@
+report.name=day_sums_client_site
+#only sqlxmltype fields appears in result xml
+report.sql=select * from vr_xml_day_sums_client_site
+
+
+
