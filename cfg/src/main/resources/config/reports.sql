@@ -17,7 +17,7 @@ select date_trunc('day',request_date) as day,/* дата */
 drop view if exists vr_xml_day_sums ;
 create or replace view vr_xml_day_sums
 as
-select a.*,xmlforest(xmlforest(a.day,a.duration,a.bytes,a.conn_count) as row) from vr_day_sums a;
+select a.*,xmlforest(xmlforest(a.day,a.duration,a.bytes,a.conn_count) as row) as row from vr_day_sums a;
 
 /*итоги за день по клиентам*/
 drop /*MATERIALIZED*/ view if exists vr_day_sums_client cascade;
@@ -43,7 +43,8 @@ from
 drop view if exists vr_xml_day_sums_client cascade;
 create or replace view vr_xml_day_sums_client
 as
-select a.*,xmlforest(xmlforest(a.day,a.address,a.name,a.description,a.duration,a.bytes,a.conn_count) as row)
+select a.*,xmlforest(xmlforest(a.day,a.address,a.name,a.description,
+	a.duration,a.bytes,a.conn_count) as row) as row
         from vr_day_sums_client a;
 
 --todo: week month
@@ -102,7 +103,9 @@ from
 drop view if exists vr_xml_day_sums_client_site;
 create or replace view vr_xml_day_sums_client_site
 as
-select a.*,xmlforest(xmlforest(a.day,a.address,a.name,a.description,a.site,a.duration,a.bytes,a.conn_count) as row)
+select a.*,
+xmlforest(xmlforest(a.day,a.address,a.name,a.description,
+	    a.site,a.duration,a.bytes,a.conn_count) as row) as row
         from vr_day_sums_client_site a;
 
 
@@ -121,7 +124,8 @@ select  date_trunc('day',request_date) as day,/* дата */
 drop view if exists vr_xml_day_sums_site;
 create or replace view vr_xml_day_sums_site
 as
-select a.*,xmlforest(xmlforest(a.day,a.site,a.duration,a.bytes,a.conn_count) as row)
+select a.*,xmlforest(xmlforest(a.day,a.site,a.duration,
+	a.bytes,a.conn_count) as row) as row
         from vr_day_sums_site a;
 
 
