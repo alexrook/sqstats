@@ -1,0 +1,5 @@
+report.name=bad3
+#wrong sql
+report.sql=wrong
+
+

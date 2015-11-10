@@ -1,0 +1,9 @@
+report.name=bad2
+#only sqlxmltype fields appears in result xml
+report.sql=select * from vr_xml_day_sums where day>?
+#params
+report.param.one.index=1
+#worng - no sqltype
+#report.param.one.sqltype=
+
+

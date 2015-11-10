@@ -1,0 +1,13 @@
+report.name=2col
+#only sqlxmltype fields appears in result xml
+report.sql=select xmlforest as row,xmlforest(duration) as d from vr_xml_day_sums where day>? and duration>?
+#params 
+report.param.day.index=1
+report.param.dur.index=2
+# int param type as declared in java.sql.Types
+report.param.day.sqltype=91
+report.param.dur.sqltype=4
+
+
+
+
