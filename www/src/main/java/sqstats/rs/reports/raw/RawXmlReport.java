@@ -116,36 +116,33 @@ public class RawXmlReport implements StreamingOutput, Serializable {
                                     e.getMessage())).build());
                         }
 
-                    } catch (SQLException e) {
-                        this.meta.setError(new ReportError(e, e.getMessage()));
+                    } catch (SQLException e) {//ошибка выполнения sql - значит он неверен, внести в мета
+                        ReportError re = new ReportError(e, e.getMessage());
+                        this.meta.setError(re);
                         fireError(e);
-                        throw new WebApplicationException(Response.serverError().entity(this).build());
+                        throw new WebApplicationException(Response.serverError().entity(re).build());
                     }
 
-                } catch (IllegalAccessException e) {//неверно указаны параметы отчета в http-запросе
+                } catch (IllegalAccessException e) {//неверно указаны параметы отчета в http-запросе, информируем пользователя
                     fireError(e);
                     throw new WebApplicationException(Response.serverError().entity(new ReportError(e,
                             e.getMessage())).build());
 
-                } catch (SQLException e) {
-                    this.meta.setError(new ReportError(e, e.getMessage()));
+                } catch (SQLException e) {//ошибка выполнения sql - значит он неверен, внести в мета
+                    ReportError re = new ReportError(e, e.getMessage());
+                    this.meta.setError(re);
                     fireError(e);
-                    throw new WebApplicationException(Response.serverError().entity(this).build());
+                    throw new WebApplicationException(Response.serverError().entity(re).build());
                 }
 
-            } catch (SQLException e) {
+            } catch (SQLException e) {//ошибка соединения - информируем пользователя
                 fireError(e);
                 throw new WebApplicationException(Response.serverError().entity(new ReportError(e,
                         e.getMessage())).build());
             }
 
-        } else {
-            try (Writer w = new OutputStreamWriter(output)) {
-                writeHeader(w);
-                writeMeta(w);
-                writeFooter(w);
-            }
-
+        } else {//report not valid
+            throw new WebApplicationException(Response.serverError().entity(this.meta.getError()).build());
         }
 
     }

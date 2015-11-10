@@ -3,6 +3,7 @@ package sqstats.rs.reports.xml;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.sql.SQLException;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -15,15 +16,26 @@ public class ReportError implements Serializable {
 
     private String stackTrace;
 
+    private String sqlState;
+
     public ReportError() {
 
     }
 
     public ReportError(Exception e, String msg) {
+
         StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw));
         this.stackTrace = sw.toString();
         this.msg = msg;
+
+        if (e instanceof SQLException) {
+            //a "SQLstate" string, which follows either the XOPEN SQLstate conventions
+            //or the SQL:2003 conventions. The values of the SQLState string 
+            //are described in the appropriate spec
+            this.sqlState = ((SQLException) e).getSQLState();
+        }
+
     }
 
     public String getMsg() {
@@ -42,5 +54,12 @@ public class ReportError implements Serializable {
         this.stackTrace = stackTrace;
     }
 
-    
+    public String getSqlState() {
+        return sqlState;
+    }
+
+    public void setSqlState(String sqlState) {
+        this.sqlState = sqlState;
+    }
+
 }
