@@ -12,7 +12,7 @@
 
         <script type="text/javascript">
             window.appdeb = {
-                urlprefix: ''
+                urlprefix: 'http://dh:8080/sqstats/'
             };
         </script>
 
@@ -22,7 +22,8 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
-
+        
+        <script src="jslib/xml2json.min.js"></script>
         <script src="js/app.js"></script>
         <script src="js/controllers.js"></script>
 
@@ -43,7 +44,6 @@
                 <div data-ng-view></div>
             </div>
         </div> <!-- //main -->
-
 
         <footer class="navbar navbar-default navbar-fixed-bottom">
             <div  class="container-fluid">
