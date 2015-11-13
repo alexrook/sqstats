@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,7 +76,7 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
         ReportMeta result = new ReportMeta();
         Properties props = new Properties();
         try {
-            props.load(new FileInputStream(file));
+            props.load(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
             reportName = Utils.tryPropertyNotEmpty(REPORT_KEY_NAME, props);
             result.setName(reportName);
