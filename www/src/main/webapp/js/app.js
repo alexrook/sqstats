@@ -1,7 +1,7 @@
 'use strict';
 
 // Declare app level module 
-angular.module('sqstats', ['ngRoute', 'sqstats.controllers']).
+angular.module('sqstats', ['ngRoute', 'sqstats.directives', 'sqstats.controllers', 'sqstats.factory']).
         config(['$routeProvider', function ($routeProvider) {
 
                 $routeProvider
@@ -11,6 +11,9 @@ angular.module('sqstats', ['ngRoute', 'sqstats.controllers']).
                         .when('/about',
                                 {templateUrl: 'part/about.html',
                                     controller: 'MainCtrl'})
+                        .when('/report/:reportName',
+                                {templateUrl: 'part/report.html',
+                                    controller: 'ReportCtrl'})
                         .otherwise({redirectTo: '/list'});
 
 

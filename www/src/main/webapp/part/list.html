@@ -9,13 +9,17 @@
 
         </thead> 
         <tbody>
-            <tr data-ng-repeat="ent in reports.entry">
+        
+            <tr data-click-link="/report/{{report.getName()}}"
+                data-ng-repeat="report in reports" 
+                data-ng-class="{danger:!report.isValid(),info:report.getDescription()}" >
 
-                <td>{{ent['raw-xml-report'].meta.name}}</td>
-                <td>{{(ent['raw-xml-report'].meta.description)?ent['raw-xml-report'].meta.description:''}}</td>
-                <td>{{(ent['raw-xml-report'].meta.error)?ent['raw-xml-report'].meta.error.msg:''}}</td>
+                <td>{{report.getName()}}</td>
+                <td>{{report.getDescription()}}</td>
+                <td>{{report.getErrorMsg()}}</td>
 
             </tr>
+        
         </tbody>
 
     </table>
