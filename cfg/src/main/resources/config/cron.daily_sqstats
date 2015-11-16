@@ -1,0 +1,8 @@
+#!/bin/sh
+
+psql -U ${db.username} -h ${db.host} ${db.name} <<EOF
+refresh materialized view vr_day_sums;
+refresh materialized view vr_day_sums_client;
+refresh materialized view vr_day_sums_client_site;
+refresh materialized view vr_day_sums_site;
+EOF
