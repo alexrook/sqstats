@@ -4,8 +4,8 @@
 
 
 /*итоги за день */
-drop /*MATERIALIZED*/ view if exists vr_day_sums cascade;
-create or replace /*MATERIALIZED*/ view vr_day_sums
+drop MATERIALIZED view if exists vr_day_sums cascade;
+create MATERIALIZED view vr_day_sums
 as
 select date_trunc('day',request_date) as day,/* дата */
 	sum(duration) as duration,/* общее время соединений */
@@ -20,8 +20,8 @@ as
 select a.*,xmlforest(xmlforest(a.day,a.duration,a.bytes,a.conn_count) as row) as row from vr_day_sums a;
 
 /*итоги за день по клиентам*/
-drop /*MATERIALIZED*/ view if exists vr_day_sums_client cascade;
-create or replace /*MATERIALIZED*/ view vr_day_sums_client
+drop MATERIALIZED view if exists vr_day_sums_client cascade;
+create MATERIALIZED view vr_day_sums_client
 as 
 select day,
 	b.address, -- ip
@@ -79,8 +79,8 @@ $$
 language plpgsql;
 
 /*итоги за день по клиентам и сайтам*/
-drop /*MATERIALIZED*/ view if exists vr_day_sums_client_site cascade;
-create or replace /*MATERIALIZED*/ view vr_day_sums_client_site
+drop MATERIALIZED view if exists vr_day_sums_client_site cascade;
+create MATERIALIZED view vr_day_sums_client_site
 as
 select day,
 	b.address, -- ip
@@ -110,8 +110,8 @@ xmlforest(xmlforest(a.day,a.address,a.name,a.description,
 
 
 /*итоги за день по сайтам*/
-drop /*MATERIALIZED*/ view if exists vr_day_sums_site cascade;
-create or replace /*MATERIALIZED*/ view vr_day_sums_site
+drop MATERIALIZED view if exists vr_day_sums_site cascade;
+create MATERIALIZED view vr_day_sums_site
 as
 select  date_trunc('day',request_date) as day,/* дата */
 	gethostnamefromurl(url) as site, -- сайт
