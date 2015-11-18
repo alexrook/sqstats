@@ -103,14 +103,19 @@ public class RawXmlReport implements StreamingOutput, Serializable {
 
                     try (ResultSet rs = statement.executeQuery();) {
 
-                        try (Writer w = new OutputStreamWriter(output)) {
-
+                        try {
+                            
+                            Writer w = new OutputStreamWriter(output);
+                            
                             writeHeader(w);
                             writeMeta(w);
                             writeResultSet(statement, rs, w);
                             writeFooter(w);
+                            
+                            
+                            w.flush();
 
-                        } catch (Exception e) {
+                        } catch (IOException | SQLException e) {
                             fireError(e);
                             throw new WebApplicationException(Response.serverError().entity(new ReportError(e,
                                     e.getMessage())).build());
