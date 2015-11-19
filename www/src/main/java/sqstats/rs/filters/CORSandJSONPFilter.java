@@ -7,17 +7,13 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  * This filter wraps CORS and JSONP requests. Mainly for debugging purposes.
  * Note: this opens a security hole on the site
  *
- * Suppose there is REST service /doc that
- * returns an JSON in form: {"field":"value"}.
- * If you activate this filter
- * the request is in the form of /doc?callback = someFunc
- * return
- * someFunc({"field":"value"})
+ * Suppose there is REST service /doc that returns an JSON in form:
+ * {"field":"value"}. If you activate this filter the request is in the form of
+ * /doc?callback = someFunc return someFunc({"field":"value"})
  *
  * @see http://ru.wikipedia.org/wiki/JSONP
  * @see https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS
