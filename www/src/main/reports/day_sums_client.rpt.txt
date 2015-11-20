@@ -2,4 +2,6 @@ report.name=day_sums_client
 #only sqlxmltype fields appears in result xml
 report.sql=select * from vr_xml_day_sums_client
 report.desc=итоги по дням и клиентам
+report.xlst.uri=simple.xsl
+
 

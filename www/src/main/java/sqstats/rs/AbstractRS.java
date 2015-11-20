@@ -1,6 +1,9 @@
 package sqstats.rs;
 
 import java.util.Arrays;
+import javax.ws.rs.core.MultivaluedMap;
+import sqstats.rs.reports.raw.RawXmlReport;
+import sqstats.rs.reports.xml.ReportMeta;
 
 
 /**
@@ -40,5 +43,17 @@ public class AbstractRS {
         return range[0] + "-" + range[1];
     }
 
+    protected void passReportParams(RawXmlReport report, MultivaluedMap<String, String> uriParams) {
+
+        ReportMeta meta = report.getMeta();
+
+        meta.clearParamsValues();
+
+        for (String key : uriParams.keySet()) {
+            //setParam ignores value if param not found in meta.params map
+            meta.setParam(key, uriParams.getFirst(key));
+        }
+
+    }
    
 }

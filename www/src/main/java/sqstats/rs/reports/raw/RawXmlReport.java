@@ -55,6 +55,16 @@ public class RawXmlReport implements StreamingOutput, Serializable {
 
     @XmlTransient
     private final List<IRawXmlReportEventListener> listeners = new ArrayList<>(1);
+    
+    private boolean raw;
+
+    public boolean isRaw() {
+        return raw;
+    }
+
+    public void setRaw(boolean raw) {
+        this.raw = raw;
+    }
 
     public void addListener(IRawXmlReportEventListener listener) {
         listeners.add(listener);
@@ -104,15 +114,14 @@ public class RawXmlReport implements StreamingOutput, Serializable {
                     try (ResultSet rs = statement.executeQuery();) {
 
                         try {
-                            
+
                             Writer w = new OutputStreamWriter(output);
-                            
+
                             writeHeader(w);
                             writeMeta(w);
                             writeResultSet(statement, rs, w);
                             writeFooter(w);
-                            
-                            
+
                             w.flush();
 
                         } catch (IOException | SQLException e) {

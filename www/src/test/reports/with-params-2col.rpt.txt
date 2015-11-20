@@ -7,6 +7,8 @@ report.param.dur.index=2
 # int param type as declared in java.sql.Types
 report.param.day.sqltype=91
 report.param.dur.sqltype=4
+report.xlst.uri=simple.xsl
+
 
 
 

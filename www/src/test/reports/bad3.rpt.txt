@@ -1,5 +1,7 @@
 report.name=bad3
 #wrong sql
 report.sql=wrong
+report.xlst.uri=simple.xsl
+
 
 

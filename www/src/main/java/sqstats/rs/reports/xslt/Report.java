@@ -1,19 +1,15 @@
 package sqstats.rs.reports.xslt;
 
+import sqstats.rs.reports.xml.XsltMeta;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.Pipe;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
@@ -97,9 +93,11 @@ public class Report extends RawXmlReport {
             return cis;
         }
     }
-    
+
     @XmlElement(name = "xslt-meta")
     private XsltMeta xsltMeta;
+
+   
 
     public XsltMeta getXsltMeta() {
         return xsltMeta;
@@ -109,32 +107,35 @@ public class Report extends RawXmlReport {
         this.xsltMeta = xsltMeta;
     }
 
-    
     @Override
     public void write(OutputStream output) throws IOException, WebApplicationException {
+       
+        if (this.isRaw()) {
+            super.write(output);
+        } else {
+            CustomPipe cp = new CustomPipe();
 
-        CustomPipe cp = new CustomPipe();
+            super.write(cp.getOutputStream());
 
-        super.write(cp.getOutputStream());
+            SAXSource sas = new SAXSource(new InputSource(cp.getInputStream()));
 
-        SAXSource sas = new SAXSource(new InputSource(cp.getInputStream()));
+            TransformerFactory tf = TransformerFactory.newInstance();
 
-        TransformerFactory tf = TransformerFactory.newInstance();
+            try {
 
-        try {
+                Transformer tarnsformer = tf.newTransformer();
+                StreamResult sr = new StreamResult(output);
+                tarnsformer.transform(sas, sr);
 
-            Transformer tarnsformer = tf.newTransformer();
-            StreamResult sr = new StreamResult(output);
-            tarnsformer.transform(sas, sr);
+            } catch (TransformerException ex) {
+                throw new WebApplicationException(
+                        Response.serverError()
+                        .entity(
+                                new ReportError(ex, ex.getMessage())
+                        ).build());
+            }
 
-        } catch (TransformerException ex) {
-            throw new WebApplicationException(
-                    Response.serverError()
-                    .entity(
-                            new ReportError(ex, ex.getMessage())
-                    ).build());
         }
-
     }
 
 }
