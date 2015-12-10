@@ -1,6 +1,8 @@
 report.name=day_sums_client_site
 #only sqlxmltype fields appears in result xml
-report.sql=select * from vr_xml_day_sums_client_site
+report.sql=select * from vr_xml_day_sums_client_site where day=?
+report.param.day.index=1
+report.param.day.sqltype=91
 report.desc=итоги по дням клиентам и сайтам
 report.xlst.uri=simple.xsl
 
