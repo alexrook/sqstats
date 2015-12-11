@@ -2,4 +2,5 @@ report.name=day_sums
 #only sqlxmltype fields appears in result xml
 report.sql=select * from vr_xml_day_sums
 report.desc=итоги по дням
-report.xslt.uri=/home/moroz/tmp/simple.xsl
+report.xslt.uri=day_sums.xsl
+report.xslt.contentType=text/html; charset=utf-8
