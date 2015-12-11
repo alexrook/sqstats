@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.sql.DataSource;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -52,6 +53,10 @@ public class RawXmlReport implements StreamingOutput, Serializable {
 
     @XmlTransient
     private DataSource dataSource;
+    
+    
+    @XmlTransient 
+    private ManagedThreadFactory threadFactory;
 
     @XmlTransient
     private final List<IRawXmlReportEventListener> listeners = new ArrayList<>(1);
@@ -89,6 +94,16 @@ public class RawXmlReport implements StreamingOutput, Serializable {
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
+
+    public ManagedThreadFactory getThreadFactory() {
+        return threadFactory;
+    }
+
+    public void setThreadFactory(ManagedThreadFactory threadFactory) {
+        this.threadFactory = threadFactory;
+    }
+    
+    
 
     public ReportMeta getMeta() {
         return meta;

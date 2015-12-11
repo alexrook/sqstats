@@ -7,6 +7,7 @@ import java.util.ServiceLoader;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Singleton;
+import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.sql.DataSource;
 import sqstats.rs.reports.raw.RawXmlReport;
 import sqstats.rs.reports.raw.meta.IReportMetaLoader;
@@ -62,8 +63,12 @@ public class ReportService {
         }
 
     }
+    
     @Resource(lookup = "java:jboss/datasources/sqstatsDS")
     DataSource dataSource;
+
+    @Resource(lookup = "java:jboss/ee/concurrency/factory/default")
+    ManagedThreadFactory threadFactory;
 
     ServiceLoader<IReportMetaLoader> slReportMetaLoader;
 
@@ -112,6 +117,7 @@ public class ReportService {
         if ((result != null) && (result instanceof Report)) {
 
             ((Report) result).setDataSource(dataSource);
+            ((Report) result).setThreadFactory(threadFactory);
             ((Report) result).setLineSeparator(lineSeparator);
 
             return (Report) result;

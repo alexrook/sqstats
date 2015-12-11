@@ -17,8 +17,8 @@ import sqstats.rs.reports.raw.meta.PlanReportMetaLoader;
  */
 public class PlanReportXsltMetaLoader extends PlanReportMetaLoader implements IReportXsltMetaLoader {
 
-    public static final String REPORT_XSLT_CONTENTTYPE = "report.xlst.contentType",
-            REPORT_XSLT_URI = "report.xlst.uri";
+    public static final String REPORT_XSLT_CONTENTTYPE = "report.xslt.contentType",
+            REPORT_XSLT_URI = "report.xslt.uri";
 
     private final Map<String, XsltMeta> xsltMetas = new HashMap<>(12);
 
@@ -29,9 +29,15 @@ public class PlanReportXsltMetaLoader extends PlanReportMetaLoader implements IR
 
         try {
             URI u = new URI(Utils.tryPropertyNotEmpty(REPORT_XSLT_URI, props));
-            if (!u.isAbsolute()) {
-                u = u.resolve(file.getCanonicalPath());
+            
+            if (u.getScheme()==null){
+                File f=new File(u.toString());
+                if (!f.isAbsolute()){
+                    f=new File(file.getParent()+"/"+f.getPath());
+                    u=f.toURI();
+                }
             }
+            
             xsltMeta.setXsltUri(u);
         } catch (URISyntaxException ex) {
             throw new IOException(ex);
