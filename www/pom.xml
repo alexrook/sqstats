@@ -17,6 +17,8 @@
     <properties>
         <!-- this charm my ide -->
         <org-netbeans-modules-maven-jaxws.rest_2e_config_2e_type>ide</org-netbeans-modules-maven-jaxws.rest_2e_config_2e_type>
+	<netbeans.hint.jdkPlatform>Open_JDK_1.7</netbeans.hint.jdkPlatform>
+        <org-netbeans-modules-web-clientproject-api.js_2e_libs_2e_folder>js/libs</org-netbeans-modules-web-clientproject-api.js_2e_libs_2e_folder>
     </properties>
 
 
