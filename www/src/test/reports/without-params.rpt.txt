@@ -1,5 +1,5 @@
 report.name=one
 #only sqlxmltype fields appears in result xml
 report.sql=select xmlforest(now() as n) as row
-report.xlst.uri=simple.xsl
+report.xslt.uri=simple.xsl
 

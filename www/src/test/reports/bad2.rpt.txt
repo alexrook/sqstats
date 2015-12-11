@@ -5,7 +5,7 @@ report.sql=select * from vr_xml_day_sums where day>?
 report.param.one.index=1
 #worng - no sqltype
 #report.param.one.sqltype=
-report.xlst.uri=simple.xsl
+report.xslt.uri=simple.xsl
 
 
 
