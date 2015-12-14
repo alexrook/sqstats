@@ -39,7 +39,7 @@ public class ReportsRS extends AbstractRS {
             report.setRaw(false);
             passReportParams(report, uriInfo.getQueryParameters());
             
-            return Response.ok(report).build();
+            return Response.ok(report).type(report.getXsltMeta().getContentType()).build();
             
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
