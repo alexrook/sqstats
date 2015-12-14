@@ -3,11 +3,11 @@ report.name=day_sums_client_site
 report.sql=select * from vr_xml_day_sums_client_site where day=? and address=?
 report.param.day.index=1
 report.param.day.sqltype=91
-report.param.day.index=2
-report.param.day.sqltype=1111 #java.sql.Types.OTHER
+report.param.address.index=2
+report.param.address.sqltype=1111
 report.desc=Итоги за день для клиента по сайтам
 report.xslt.uri=simple.xsl
-
+#report.xslt.contentType=text/html; charset=utf-8
 
 
 
