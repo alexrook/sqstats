@@ -23,10 +23,7 @@
 							background-color: #2A2730;
 							border-top: 1px solid #e5e5e5;
 						}		
-						.blog-footer p:last-child {
-						 margin-bottom: 0;
-						}
-						
+											
 					footer>ul {
 							float:right;
 							padding-left: 0px;
@@ -41,6 +38,16 @@
 						float:right;
 					}
 
+					.param-value {
+						display: inline;
+						font-size: 115%;
+						font-weight: 700;
+						color: blue;
+						line-height: 1;
+						text-align: center;
+						white-space: nowrap;
+						vertical-align: baseline;
+					}
 				</style>
 
             </head>
@@ -63,21 +70,21 @@
                         </h1>
 						<div class="panel panel-default">
 							<div class="panel-body">
-						<p>
-						    <strong>Statement: </strong> 
-						    <xsl:value-of select='report/meta/statement'/>
-						</p>
-						<p>
-							<strong>Statement params:</strong>
-						</p>
-						<ul>
-							<xsl:apply-templates select='report/meta/params/entry'/>
-						</ul>
-						
-                        <p>
-                            <strong>Generation timestamp: </strong> 
-                            <xsl:value-of select='report/meta/genDate'/>
-                        </p>
+							<p>
+								<strong>Statement: </strong> 
+								<xsl:value-of select='report/meta/statement'/>
+							</p>
+							<p>
+								<strong>Statement params:</strong>
+							</p>
+							<ul>
+								<xsl:apply-templates select='report/meta/params/entry'/>
+							</ul>
+							
+							<p>
+								<strong>Generation timestamp: </strong> 
+								<xsl:value-of select='report/meta/genDate'/>
+							</p>
 							</div>
 						</div>
 												
@@ -162,10 +169,12 @@
 	
 	<xsl:template match='entry'>
 		<li>
-			param <strong><xsl:value-of select='value/name'/></strong> with
+			param <strong class="param-value"><xsl:value-of select='value/name'/></strong>
+			=
+			<strong class="param-value"><xsl:value-of select='value/value'/></strong> with
 			position <strong><xsl:value-of select='value/posInStmt'/></strong> and
-			java.sql.Type <strong><xsl:value-of select='value/sqlTypeNum'/></strong>,
-			value <strong><xsl:value-of select='value/value'/></strong>
+			java.sql.Type <strong><xsl:value-of select='value/sqlTypeNum'/></strong>
+			 
 		</li>
 	</xsl:template>
 </xsl:stylesheet> 
