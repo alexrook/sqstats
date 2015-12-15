@@ -6,8 +6,8 @@ report.param.day.sqltype=91
 report.param.address.index=2
 report.param.address.sqltype=1111
 report.desc=Итоги за день для клиента по сайтам
-report.xslt.uri=simple.xsl
-#report.xslt.contentType=text/html; charset=utf-8
+report.xslt.uri=day_sums_client_site.xsl
+report.xslt.contentType=text/html; charset=utf-8
 
 
 
