@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
     <xsl:template match="/">
-		<xsl:variable name="date" select="substring-before(report/resultset/column/row/day,'T')"/>
+        <xsl:variable name="date" select="substring-before(report/resultset/column/row/day,'T')"/>
         <html lang="ru">
             <head>
                 <meta charset="utf-8"/>
@@ -15,29 +15,33 @@
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
                       integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
                       crossorigin="anonymous"/>
-				<link rel="stylesheet" href="css/main.css"/>
+                <link rel="stylesheet" href="../../css/main.css"/>
             </head>
             <body>
-				<ol class="breadcrumb">
-					 <li><a href="/">На главную</a></li>
-					 <li>
-						<a href="day_sums">Итоги по дням</a>
-					 </li>
-					 <li>
-						<a>
-							<xsl:attribute name="title">
-								<xsl:value-of select="concat('итоги за ',$date,' по клиентам')"/>
-							</xsl:attribute>
-							<xsl:attribute name="href">
-								<xsl:value-of
-											  select="concat('day_sums_client?day=',$date)"/>
-							</xsl:attribute>
-							Итоги за <xsl:value-of select="$date"/>
-						</a>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="../../">На главную</a>
+                    </li>
+                    <li>
+                        <a href="day_sums">Итоги по дням</a>
+                    </li>
+                    <li>
+                        <a>
+                            <xsl:attribute name="title">
+                                <xsl:value-of select="concat('итоги за ',$date,' по клиентам')"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="href">
+                                <xsl:value-of
+                                    select="concat('day_sums_client?day=',$date)"/>
+                            </xsl:attribute>
+                            Итоги за <xsl:value-of select="$date"/>
+                        </a>
 						
-					 </li>
-					 <li class="active"><xsl:value-of select='report/meta/description'/></li>
-				</ol>
+                    </li>
+                    <li class="active">
+                        <xsl:value-of select='report/meta/description'/>
+                    </li>
+                </ol>
                 <div class="container">
                     <div class="page-header">
                         <h1>
@@ -47,36 +51,40 @@
                                 <xsl:value-of select='report/meta/description'/>
                             </small>
                         </h1>
-						<div class="panel panel-default">
-							<div class="panel-body">
-							<p>
-								<strong>Statement: </strong> 
-								<xsl:value-of select='report/meta/statement'/>
-							</p>
-							<p>
-								<strong>Statement params:</strong>
-							</p>
-							<ul>
-								<xsl:apply-templates select='report/meta/params/entry'/>
-							</ul>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <p>
+                                    <strong>Statement: </strong> 
+                                    <xsl:value-of select='report/meta/statement'/>
+                                </p>
+                                <p>
+                                    <strong>Statement params:</strong>
+                                </p>
+                                <ul>
+                                    <xsl:apply-templates select='report/meta/params/entry'/>
+                                </ul>
 							
-							<p>
-								<strong>Generation timestamp: </strong> 
-								<xsl:value-of select='report/meta/genDate'/>
-							</p>
-							</div>
-						</div>
+                                <p>
+                                    <strong>Generation timestamp: </strong> 
+                                    <xsl:value-of select='report/meta/genDate'/>
+                                </p>
+                            </div>
+                        </div>
 												
                     </div>
                     <xsl:apply-templates select='report/resultset/column'/>
                 </div>
-				<footer>
-					<ul>
-						<li><a href="https://github.com/alexrook/sqstats">GitHub</a></li>
-						<li><a href="../about/">About</a></li>
-					</ul>
-					<p>2015 VKEK IT Depth</p>
-				</footer>
+                <footer>
+                    <ul>
+                        <li>
+                            <a href="https://github.com/alexrook/sqstats">GitHub</a>
+                        </li>
+                        <li>
+                            <a href="../about/">About</a>
+                        </li>
+                    </ul>
+                    <p>2015 VKEK IT Depth</p>
+                </footer>
             </body>
         </html>
     </xsl:template>
@@ -93,22 +101,22 @@
                             <th>Число соединений</th> 
                         </tr> 
                     </thead>
-					<tfoot>
-						<tr class="info">
+                    <tfoot>
+                        <tr class="info">
                             <th>
-								Total:
-								<xsl:value-of select="count(row/site)"/>
-								sites
-							</th> 
+                                Total:
+                                <xsl:value-of select="count(row/site)"/>
+                                sites
+                            </th> 
                             <th></th> 
                             <th>
-								<xsl:value-of select="sum(row/bytes)"/>
-							</th> 
+                                <xsl:value-of select="sum(row/bytes)"/>
+                            </th> 
                             <th>
-								<xsl:value-of select="sum(row/conn_count)"/>
-							</th> 
+                                <xsl:value-of select="sum(row/conn_count)"/>
+                            </th> 
                         </tr> 
-					</tfoot>
+                    </tfoot>
                     <tbody>
                         <xsl:apply-templates select='row'/>
                     </tbody>
@@ -117,22 +125,22 @@
         </div>
     </xsl:template>
 	
-	<xsl:template match='row'>
-		<xsl:variable name="bytes" select='bytes'/>
-		<xsl:variable name="site" select='site'/>
+    <xsl:template match='row'>
+        <xsl:variable name="bytes" select='bytes'/>
+        <xsl:variable name="site" select='site'/>
         <tr>
             <td>
-				<a>
-					<xsl:attribute name="title">
-						<xsl:value-of select="concat('перейти к ', $site)"/>
-					</xsl:attribute>
-					<xsl:attribute name="href">
-						<xsl:value-of
-									  select="concat('http://',$site)"/>
-					</xsl:attribute>
-					<xsl:value-of select='$site'/>
-				</a>
-			</td>
+                <a>
+                    <xsl:attribute name="title">
+                        <xsl:value-of select="concat('перейти к ', $site)"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="href">
+                        <xsl:value-of
+                            select="concat('http://',$site)"/>
+                    </xsl:attribute>
+                    <xsl:value-of select='$site'/>
+                </a>
+            </td>
             <td>            
                 <xsl:value-of select='duration'/>
             </td>
@@ -145,15 +153,23 @@
         </tr>
     </xsl:template>
 	
-	<xsl:template match='entry'>
-		<li>
-			param <strong class="param-value"><xsl:value-of select='value/name'/></strong>
-			=
-			<strong class="param-value"><xsl:value-of select='value/value'/></strong> with
-			position <strong><xsl:value-of select='value/posInStmt'/></strong> and
-			java.sql.Type <strong><xsl:value-of select='value/sqlTypeNum'/></strong>
+    <xsl:template match='entry'>
+        <li>
+            param <strong class="param-value">
+                <xsl:value-of select='value/name'/>
+            </strong>
+            =
+            <strong class="param-value">
+                <xsl:value-of select='value/value'/>
+            </strong> with
+            position <strong>
+                <xsl:value-of select='value/posInStmt'/>
+            </strong> and
+            java.sql.Type <strong>
+                <xsl:value-of select='value/sqlTypeNum'/>
+            </strong>
 			 
-		</li>
-	</xsl:template>
+        </li>
+    </xsl:template>
 	
 </xsl:stylesheet> 

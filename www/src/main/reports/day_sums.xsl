@@ -14,13 +14,17 @@
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
                       integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
                       crossorigin="anonymous"/>
-				<link rel="stylesheet" href="css/main.css"/>
+                <link rel="stylesheet" href="../../css/main.css"/>
             </head>
             <body>
-				<ol class="breadcrumb">
-					 <li><a href="/">На главную</a></li>
-					 <li class="active"><xsl:value-of select='report/meta/description'/></li>
-				</ol>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="../../">На главную</a>
+                    </li>
+                    <li class="active">
+                        <xsl:value-of select='report/meta/description'/>
+                    </li>
+                </ol>
                 <div class="container">
                     <div class="page-header">
                         <h1>
@@ -43,13 +47,17 @@
         
 
                 </div>
-				<footer>
-					<ul>
-						<li><a href="https://github.com/alexrook/sqstats">GitHub</a></li>
-						<li><a href="../about/">About</a></li>
-					</ul>
-					<p>2015 VKEK IT Depth</p>
-				</footer>
+                <footer>
+                    <ul>
+                        <li>
+                            <a href="https://github.com/alexrook/sqstats">GitHub</a>
+                        </li>
+                        <li>
+                            <a href="../about/">About</a>
+                        </li>
+                    </ul>
+                    <p>2015 VKEK IT Depth</p>
+                </footer>
             </body>
         </html>
     </xsl:template>
@@ -66,22 +74,22 @@
                             <th>Число соединений</th> 
                         </tr> 
                     </thead>
-					<tfoot>
-						<tr class="info">
+                    <tfoot>
+                        <tr class="info">
                             <th>
-								Total:
-								<xsl:value-of select="count(row/day)"/>
-								days
-							</th> 
+                                Total:
+                                <xsl:value-of select="count(row/day)"/>
+                                days
+                            </th> 
                             <th></th> 
                             <th>
-								<xsl:value-of select="sum(row/bytes)"/>
-							</th> 
+                                <xsl:value-of select="sum(row/bytes)"/>
+                            </th> 
                             <th>
-								<xsl:value-of select="sum(row/conn_count)"/>
-							</th> 
+                                <xsl:value-of select="sum(row/conn_count)"/>
+                            </th> 
                         </tr> 
-					</tfoot>
+                    </tfoot>
                     <tbody>
                         <xsl:apply-templates select='row'/>
                     </tbody>
@@ -90,33 +98,33 @@
         </div>
     </xsl:template>
     <xsl:template match='row'>
-		<xsl:variable name="date" select="substring-before(day,'T')"/>
-		<xsl:variable name="bytes" select='bytes'/>
+        <xsl:variable name="date" select="substring-before(day,'T')"/>
+        <xsl:variable name="bytes" select='bytes'/>
         <tr>
             <td>
-				<a>
-					<xsl:attribute name="title">
-						<xsl:value-of select="concat('итоги за ',$date,' по пользователям')"/>
-					</xsl:attribute>
-					<xsl:attribute name="href">
-						<xsl:value-of select="concat('day_sums_client?day=',$date)"/>
-					</xsl:attribute>
-					<xsl:value-of select='$date'/>
-				</a>
+                <a>
+                    <xsl:attribute name="title">
+                        <xsl:value-of select="concat('итоги за ',$date,' по пользователям')"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="concat('day_sums_client?day=',$date)"/>
+                    </xsl:attribute>
+                    <xsl:value-of select='$date'/>
+                </a>
             </td>
             <td>            
                 <xsl:value-of select='duration'/>
             </td>
             <td>            
                 <a>
-					<xsl:attribute name="title">
-						<xsl:value-of select="concat('итоги за ',$date,' по сайтам')"/>
-					</xsl:attribute>
-					<xsl:attribute name="href">
-						<xsl:value-of select="concat('day_sums_site?day=',$date)"/>
-					</xsl:attribute>
-					<xsl:value-of select='$bytes'/>
-				</a>
+                    <xsl:attribute name="title">
+                        <xsl:value-of select="concat('итоги за ',$date,' по сайтам')"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="concat('day_sums_site?day=',$date)"/>
+                    </xsl:attribute>
+                    <xsl:value-of select='$bytes'/>
+                </a>
             </td>
             <td>            
                 <xsl:value-of select='conn_count'/>
