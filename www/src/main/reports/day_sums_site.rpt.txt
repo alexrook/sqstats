@@ -3,9 +3,9 @@ report.name=day_sums_site
 report.sql=select * from vr_xml_day_sums_site where day=?
 report.param.day.index=1
 report.param.day.sqltype=91
-report.desc=итоги по дням и сайтам
-report.xslt.uri=simple.xsl
-#report.xslt.contentType=text/html; charset=utf-8
+report.desc=Итоги за день по сайтам
+report.xslt.uri=day_sums_site.xsl
+report.xslt.contentType=text/html; charset=utf-8
 
 
 
