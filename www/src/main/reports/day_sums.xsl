@@ -14,31 +14,7 @@
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
                       integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
                       crossorigin="anonymous"/>
-				<style>
-					footer {
-							margin-top: 30px;
-							padding: 15px 30px;
-							color: #999;
-							text-align: left;
-							background-color: #2A2730;
-							border-top: 1px solid #e5e5e5;
-						}		
-						.blog-footer p:last-child {
-						 margin-bottom: 0;
-						}
-						
-					footer>ul {
-							float:right;
-							padding-left: 0px;
-							margin-bottom: 20px;
-					}
-					
-					footer>ul li {
-						 display: inline-block;
-					}
-
-				</style>
-
+				<link rel="stylesheet" href="css/main.css"/>
             </head>
             <body>
 				<ol class="breadcrumb">
