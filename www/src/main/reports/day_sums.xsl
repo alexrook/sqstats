@@ -18,7 +18,7 @@
             </head>
             <body>
 				<ol class="breadcrumb">
-					 <li><a href="#">На главную</a></li>
+					 <li><a href="/">На главную</a></li>
 					 <li class="active"><xsl:value-of select='report/meta/description'/></li>
 				</ol>
                 <div class="container">

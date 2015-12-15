@@ -19,7 +19,7 @@
             </head>
             <body>
 				<ol class="breadcrumb">
-					 <li><a href="#">На главную</a></li>
+					 <li><a href="/">На главную</a></li>
 					 <li>
 						<a href="day_sums">Итоги по дням</a>
 					 </li>
