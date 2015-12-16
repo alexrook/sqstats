@@ -1,0 +1,12 @@
+*[data-click-link]{
+    cursor: pointer;
+}
+
+footer {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.error {
+    background: red;
+}

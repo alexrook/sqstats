@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,16 +32,17 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
 
     private IReportErrorStorage errorsStorage;
 
+    private List<ReportMeta> reportMetas;
+
     @Override
     public void init(IReportErrorStorage errorsStorage) throws IOException {
         this.errorsStorage = errorsStorage;
         reportDir = Utils.getProperty("reports.dir");
         reportsDb = Utils.getProperty("reports.db.file");
+        fillReportMetaList();
     }
 
-    @Override
-    public List<ReportMeta> getReportMetas() throws IOException {
-
+    private void fillReportMetaList() throws IOException {
         File rDir = new File(reportDir);
 
         if ((!rDir.isDirectory()) && (!rDir.canRead())) {
@@ -49,13 +51,17 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
 
         File[] reportFiles = rDir.listFiles(this);
 
-        ArrayList<ReportMeta> result = new ArrayList<>();
+        reportMetas = new ArrayList<>();
 
         for (File report : reportFiles) {
-            result.add(parseFile(report));
+            reportMetas.add(parseFile(report));
         }
         createDbFile(rDir);
-        return result;
+    }
+
+    @Override
+    public List<ReportMeta> getReportMetas() {
+        return reportMetas;
     }
 
     private boolean createDbFile(File dir) throws IOException {
@@ -75,7 +81,7 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
         ReportMeta result = new ReportMeta();
         Properties props = new Properties();
         try {
-            props.load(new FileInputStream(file));
+            props.load(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
             reportName = Utils.tryPropertyNotEmpty(REPORT_KEY_NAME, props);
             result.setName(reportName);
@@ -102,9 +108,11 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
                 param.setSqlTypeNum(paramSqlType);
                 params.put(paramIndex, param);
             }
-            
+
             result.setParams(params);
-            
+
+            parsedFile(file, props, reportName);
+
         } catch (IOException e) {
 
             String name = reportName.length() > 0 ? reportName : file.getName();//имя может быть ошибочно пропущено in rpt.txt file
@@ -114,9 +122,14 @@ public class PlanReportMetaLoader implements IReportMetaLoader, FilenameFilter {
             addReportError(name, re);
 
         }
-        
+
         return result;
-        
+
+    }
+
+    //for subclassing
+    protected void parsedFile(File file, Properties props, String reportName) throws IOException {
+
     }
 
     @Override

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+        <title>About Squid Stats</title>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+              crossorigin="anonymous">
+
+        <link rel="stylesheet" href="css/main.css"/>
+    </head>
+
+    <body>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">На главную</a>
+            </li>
+            <li class="active">
+                About
+            </li>
+        </ol>
+
+        <div class="container">
+            <div class="page-header">
+                <h1>Статистика Squid</h1>
+            </div>
+            <p class="lead">Создано во VKEK IT Department под влиянием утилиты <a href="http://sourceforge.net/projects/sarg/">Sarg</a>,
+                исходный код доступен на <a href="https://github.com/alexrook/sqstats">GitHub</a></p>
+            <ul>
+                <li>Данные загружаются с двух экземпляров 
+                    <a href="http://www.squid-cache.org/">Squid</a>
+                    в PostgreSQL в соответствии с 
+                    <a href="http://wiki.squid-cache.org/Features/LogFormat#Default_Formats">Squid default log format</a></li>
+                <li>Расчет итогов производится ежесуточно, по /etc/cron.daily, 
+                    поэтому итоги для текущих суток не репрезентативны</li>
+                <li>Суммы байт учитывают, в том числе, обмен траффиком между Squid и клиентом</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>2015 VKEK IT Dept</p>
+        </footer>
+
+    </body>
+</html>

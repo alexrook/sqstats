@@ -1,0 +1,6 @@
+report.name=day_sums
+#only sqlxmltype fields appears in result xml
+report.sql=select * from vr_xml_day_sums order by 1 desc
+report.desc=Итоги по дням
+report.xslt.uri=day_sums.xsl
+report.xslt.contentType=text/html; charset=utf-8

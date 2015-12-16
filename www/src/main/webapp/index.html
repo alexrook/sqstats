@@ -1,9 +1,119 @@
 <!DOCTYPE html>
 <html lang="ru">
     <head>
-        <title>Yes it works</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Статистика Squid</title>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+              crossorigin="anonymous">
+
+        <link rel="stylesheet" href="css/main.css"/>
+
+        <style>
+            /*  body {
+                  background-image: url("i/squids.png");
+                  background-size:cover;   
+              
+              }*/
+            /*https://css-tricks.com/snippets/css/transparent-background-images/*/
+            body::after {
+                content: "";
+                background-image: url("i/squids.png");
+                background-size:cover;   
+                opacity: 0.5;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                position: absolute;
+                z-index: -1;   
+            }
+            #menu {
+                opacity: 0.5; 
+                border: none;
+            }
+
+            #menu img {
+                opacity: 0.5; 
+            }
+            #menu .container{
+                width: 99%;
+            }
+            #menu a{
+
+                font-weight: bolder;
+            }
+            #main{
+                padding: 70px 15px;
+            }
+
+            #report-list {
+                font-size: xx-large;
+                width: 12%;
+                margin: 0 auto;
+            }
+        </style>
+
     </head>
+
     <body>
-	<p>hello</p>
+
+        <nav id="menu" class="navbar navbar-fixed-top">
+            <div class="container">
+
+                <div class="nav navbar-nav navbar-right log-in" id="log-in">
+
+                    <a class="navbar-link" href="#" title="Signed in as anonymous">
+                        <img class="avatar" alt="anonymous avatar" 
+                             src="i/anonymous.svg">
+                    </a>
+
+                </div>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="exp/index.html" class="navbar-link">Exp</a></li>
+                    <li><a href="about.html" class="navbar-link">About</a></li>
+                </ul>
+
+            </div>
+        </nav>
+
+
+        <div id="main" class="container">
+            <div class="page-header">
+                <h1>Статистика Squid
+                    <small> mainly inspired by 
+                        <a href="http://sourceforge.net/projects/sarg/">sarg</a>
+                    </small>
+                </h1>
+            </div>
+
+
+            <ul id="report-list">
+                <li>
+                    <a href="rs/xslt/day_sums">Дни</a>
+                </li>
+                <li>
+                    <a class="link-disabled" href="#">Mесяцы</a>
+                </li>
+                <li>
+                    <a class="link-disabled" href="#">Годы</a>
+                </li>
+            </ul>
+
+        </div>
+
+        <footer>
+            <ul>
+                <li><a href="https://github.com/alexrook/sqstats">GitHub</a></li>
+            </ul>
+            <p>2015 VKEK IT Dept</p>
+        </footer>
     </body>
 </html>

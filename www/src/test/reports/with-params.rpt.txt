@@ -5,6 +5,8 @@ report.sql=select * from vr_xml_day_sums where day>?
 report.param.day.index=1
 # int param type as declared in java.sql.Types
 report.param.day.sqltype=91
+report.xslt.uri=simple.xsl
+
 
 
 

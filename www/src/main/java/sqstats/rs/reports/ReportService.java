@@ -1,4 +1,4 @@
-package sqstats.rs.reports.raw;
+package sqstats.rs.reports;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -7,10 +7,14 @@ import java.util.ServiceLoader;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Singleton;
+import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.sql.DataSource;
+import sqstats.rs.reports.raw.RawXmlReport;
 import sqstats.rs.reports.raw.meta.IReportMetaLoader;
 import sqstats.rs.reports.xml.ReportError;
 import sqstats.rs.reports.xml.ReportMeta;
+import sqstats.rs.reports.xslt.meta.IReportXsltMetaLoader;
+import sqstats.rs.reports.xslt.Report;
 
 /**
  * @author moroz
@@ -59,8 +63,12 @@ public class ReportService {
         }
 
     }
+    
     @Resource(lookup = "java:jboss/datasources/sqstatsDS")
     DataSource dataSource;
+
+    @Resource(lookup = "java:jboss/ee/concurrency/factory/default")
+    ManagedThreadFactory threadFactory;
 
     ServiceLoader<IReportMetaLoader> slReportMetaLoader;
 
@@ -97,6 +105,28 @@ public class ReportService {
         return result;
     }
 
+    public Report getReport(String name) {
+        return getReport(name, System.lineSeparator());
+    }
+
+    public Report getReport(String name, String lineSeparator) {
+
+        checkChanges();
+
+        Object result = reports.get(name);
+        if ((result != null) && (result instanceof Report)) {
+
+            ((Report) result).setDataSource(dataSource);
+            ((Report) result).setThreadFactory(threadFactory);
+            ((Report) result).setLineSeparator(lineSeparator);
+
+            return (Report) result;
+        } else {
+            return null;
+        }
+
+    }
+
     public void addError(String name, ReportError re) {
         reportErrors.addError(name, re);
 
@@ -114,12 +144,21 @@ public class ReportService {
             for (IReportMetaLoader rml : slReportMetaLoader) {
 
                 rml.init(reportErrors);
-
-                for (ReportMeta rmeta : rml.getReportMetas()) {
-                    RawXmlReport report = new RawXmlReport();
-                    report.setMeta(rmeta);
-                    report.addListener(reportErrors);
-                    reports.put(rmeta.getName(), report);
+                if (rml instanceof IReportXsltMetaLoader) {
+                    for (ReportMeta rmeta : rml.getReportMetas()) {
+                        Report report = new Report();
+                        report.setMeta(rmeta);
+                        report.addListener(reportErrors);
+                        report.setXsltMeta(((IReportXsltMetaLoader) rml).getXsltMeta(rmeta.getName()));
+                        reports.put(rmeta.getName(), report);
+                    }
+                } else {
+                    for (ReportMeta rmeta : rml.getReportMetas()) {
+                        RawXmlReport report = new RawXmlReport();
+                        report.setMeta(rmeta);
+                        report.addListener(reportErrors);
+                        reports.put(rmeta.getName(), report);
+                    }
                 }
 
             }

@@ -1,6 +1,5 @@
-package sqstats.rs.reports.raw;
+package sqstats.rs.reports.xslt;
 
-import sqstats.rs.reports.ReportService;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
@@ -13,53 +12,46 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import sqstats.rs.AbstractRS;
-import sqstats.rs.reports.xml.ReportError;
+import sqstats.rs.reports.ReportService;
+import sqstats.rs.reports.raw.RawXmlReport;
 
 /**
  * @author moroz
  */
-@Path("/raw")
-public class RawReportsRS extends AbstractRS {
-
+@Path("/xslt")
+public class ReportsRS extends AbstractRS {
+    
     @EJB
     ReportService reportService;
-
-    @GET
-    @Path("errors")
-    @Produces(MediaType.APPLICATION_XML)
-    public Map<String, ReportError> getErrors() {
-        return reportService.getErrors();
-    }
-
+    
     @GET
     @Path("{name:\\w+}")
     @Produces(MediaType.APPLICATION_XML)
     public Response getReportForName(@PathParam("name") String name,
             @Context UriInfo uriInfo, @Context HttpHeaders headers) {
-
-        RawXmlReport rawReport;
-
-        rawReport = reportService.getRawXmlReport(name);
-
-        if (rawReport != null) {
+        
+        Report report;
+        
+        report = reportService.getReport(name);
+        
+        if (report != null) {
             
-            rawReport.setRaw(true);
+            report.setRaw(false);
+            passReportParams(report, uriInfo.getQueryParameters());
             
-            passReportParams(rawReport, uriInfo.getQueryParameters());
-
-            return Response.ok(rawReport).build();
-
+            return Response.ok(report).type(report.getXsltMeta().getContentType()).build();
+            
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-
+        
     }
-
+    
     @GET
     @Path("reports")
     @Produces(MediaType.APPLICATION_XML)
-    public Map<String, RawXmlReport> getRawReportList() {
+    public Map<String, RawXmlReport> getReportList() {
         return reportService.getReports();
     }
-
+    
 }

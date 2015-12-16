@@ -1,0 +1,13 @@
+report.name=day_sums_client_site
+#only sqlxmltype fields appears in result xml
+report.sql=select * from vr_xml_day_sums_client_site where day=? and address=?
+report.param.day.index=1
+report.param.day.sqltype=91
+report.param.address.index=2
+report.param.address.sqltype=1111
+report.desc=Итоги за день для клиента по сайтам
+report.xslt.uri=day_sums_client_site.xsl
+report.xslt.contentType=text/html; charset=utf-8
+
+
+

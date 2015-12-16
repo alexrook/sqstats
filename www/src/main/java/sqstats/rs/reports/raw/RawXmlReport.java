@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.sql.DataSource;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -52,9 +53,23 @@ public class RawXmlReport implements StreamingOutput, Serializable {
 
     @XmlTransient
     private DataSource dataSource;
+    
+    
+    @XmlTransient 
+    private ManagedThreadFactory threadFactory;
 
     @XmlTransient
     private final List<IRawXmlReportEventListener> listeners = new ArrayList<>(1);
+    
+    private boolean raw;
+
+    public boolean isRaw() {
+        return raw;
+    }
+
+    public void setRaw(boolean raw) {
+        this.raw = raw;
+    }
 
     public void addListener(IRawXmlReportEventListener listener) {
         listeners.add(listener);
@@ -80,6 +95,16 @@ public class RawXmlReport implements StreamingOutput, Serializable {
         this.dataSource = dataSource;
     }
 
+    public ManagedThreadFactory getThreadFactory() {
+        return threadFactory;
+    }
+
+    public void setThreadFactory(ManagedThreadFactory threadFactory) {
+        this.threadFactory = threadFactory;
+    }
+    
+    
+
     public ReportMeta getMeta() {
         return meta;
     }
@@ -103,14 +128,18 @@ public class RawXmlReport implements StreamingOutput, Serializable {
 
                     try (ResultSet rs = statement.executeQuery();) {
 
-                        try (Writer w = new OutputStreamWriter(output)) {
+                        try {
+
+                            Writer w = new OutputStreamWriter(output);
 
                             writeHeader(w);
                             writeMeta(w);
                             writeResultSet(statement, rs, w);
                             writeFooter(w);
 
-                        } catch (Exception e) {
+                            w.flush();
+
+                        } catch (IOException | SQLException e) {
                             fireError(e);
                             throw new WebApplicationException(Response.serverError().entity(new ReportError(e,
                                     e.getMessage())).build());
