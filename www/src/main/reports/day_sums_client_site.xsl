@@ -80,10 +80,10 @@
                             <a href="https://github.com/alexrook/sqstats">GitHub</a>
                         </li>
                         <li>
-                            <a href="../about/">About</a>
+                            <a href="../../about.html">About</a>
                         </li>
                     </ul>
-                    <p>2015 VKEK IT Depth</p>
+                    <p>2015 VKEK IT Dept</p>
                 </footer>
             </body>
         </html>

@@ -26,10 +26,15 @@ footer {
 footer>ul {
     float:right;
     padding-left: 0px;
+    margin: 0px;
 }
 
 footer>ul li {
     display: inline-block;
+}
+
+footer p:last-child{
+    margin: 0px;
 }
 
 .report-params {
@@ -48,7 +53,31 @@ footer>ul li {
 }
 
 .link-disabled, .link-disabled:hover, .link-disabled:focus {
-    color: black;
+    color: black !important;
     cursor: default;
     text-decoration: none;
 }
+
+.avatar {
+    float: right;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    margin-top: 5px;
+}
+.log-in {
+    margin-left: 5px;
+}
+.logged-in a, .log-in a{
+    display: block;
+    vertical-align: middle;
+}
+
+.logged-in a{
+    font-size: small;
+    font-family: monospace;
+}
+
+
+
+
