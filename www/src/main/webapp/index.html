@@ -14,11 +14,6 @@
         <link rel="stylesheet" href="css/main.css"/>
 
         <style>
-            /*  body {
-                  background-image: url("i/squids.jpg");
-                  background-size:cover;   
-              
-              }*/
             /*https://css-tricks.com/snippets/css/transparent-background-images/*/
             body::after {
                 content: "";
@@ -44,8 +39,7 @@
                 width: 99%;
             }
             #menu a{
-
-                font-weight: bolder;
+               font-weight: bolder;
             }
             #main{
                 padding: 70px 15px;
@@ -56,6 +50,11 @@
                 width: 12%;
                 margin: 0 auto;
             }
+
+            .navbar-brand {
+                font-style:italic;
+            }
+            
         </style>
 
     </head>
@@ -64,6 +63,11 @@
 
         <nav id="menu" class="navbar navbar-fixed-top">
             <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/" title="Портал">
+                        u.vkekrk.ru
+                    </a>
+                </div>
 
                 <div class="nav navbar-nav navbar-right log-in" id="log-in">
 
@@ -95,7 +99,7 @@
 
             <ul id="report-list">
                 <li>
-                    <a href="rs/xslt/day_sums">Дни</a>
+                    <a href="rs/xslt/day_sums" title="статистика по дням">Дни</a>
                 </li>
                 <li>
                     <a class="link-disabled" href="#">Mесяцы</a>
@@ -109,7 +113,7 @@
 
         <footer>
             <ul>
-                <li><a href="https://github.com/alexrook/sqstats">GitHub</a></li>
+                <li><a href="https://github.com/alexrook/sqstats" title="просмотреть исходный код">GitHub</a></li>
             </ul>
             <p>2015 VKEK IT Dept</p>
         </footer>
