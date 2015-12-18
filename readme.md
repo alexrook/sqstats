@@ -1,6 +1,7 @@
 # sqstats
 
 Кофигурационные файлы squid, rsyslog, postgresql
++ reports (j2ee webapp)
 собранные в одном проекте, для удобства.
 
 Цель - хранение статистики squid3 в базе данных.
