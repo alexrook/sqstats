@@ -13,6 +13,12 @@
                 <!-- Latest compiled and minified CSS -->
                 <link rel="stylesheet" href="/css/bootstrap/336/css/bootstrap.min.css"/>
                 <link rel="stylesheet" href="../../css/main.css"/>
+                
+                <script src="/js/jquery/214/jquery.min.js"></script>
+                <script src="/js/numeral/153/numeral.min.js"></script>
+                <script src="/js/numeral/153/languages.min.js"></script>
+                <script src="../../js/main.js"></script>
+                
             </head>
             <body>
                 <ol class="breadcrumb">
@@ -80,10 +86,10 @@
                                 days
                             </th> 
                             <th></th> 
-                            <th>
+                            <th class="bytes">
                                 <xsl:value-of select="sum(row/bytes)"/>
                             </th> 
-                            <th>
+                            <th class="conn_count">
                                 <xsl:value-of select="sum(row/conn_count)"/>
                             </th> 
                         </tr> 
@@ -110,11 +116,11 @@
                     <xsl:value-of select='$date'/>
                 </a>
             </td>
-            <td>            
+            <td class="duration">            
                 <xsl:value-of select='duration'/>
             </td>
             <td>            
-                <a>
+                <a class="bytes">
                     <xsl:attribute name="title">
                         <xsl:value-of select="concat('итоги за ',$date,' по сайтам')"/>
                     </xsl:attribute>
@@ -124,7 +130,7 @@
                     <xsl:value-of select='$bytes'/>
                 </a>
             </td>
-            <td>            
+            <td class="conn_count">            
                 <xsl:value-of select='conn_count'/>
             </td>
         </tr>
