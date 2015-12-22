@@ -134,6 +134,15 @@ from
 
 REFRESH MATERIALIZED VIEW vr_day_client_url_download;
 
+-- xml version
+drop view if exists vr_xml_day_client_url_download;
+create or replace view vr_xml_day_client_url_download
+as
+select a.*,
+xmlforest(xmlforest(a.day,a.address,a.name,a.description,
+	    a.url,a.duration,a.bytes,a.conn_count) as row) as row
+        from vr_day_client_url_download a;
+
 /*
 select substring(url from '[^\/]*$'),address,conn_count from vr_day_downloads
     where day='2015-12-20'::date order by 1

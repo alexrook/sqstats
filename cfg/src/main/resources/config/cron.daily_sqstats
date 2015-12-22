@@ -5,4 +5,5 @@ refresh materialized view vr_day_sums;
 refresh materialized view vr_day_sums_client;
 refresh materialized view vr_day_sums_client_site;
 refresh materialized view vr_day_sums_site;
+refresh materialized view vr_day_client_url_download;
 EOF
