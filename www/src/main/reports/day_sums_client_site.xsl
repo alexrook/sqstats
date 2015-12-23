@@ -18,6 +18,7 @@
 				<script src="/js/jquery/214/jquery.min.js"></script>
                 <script src="/js/numeral/153/numeral.min.js"></script>
                 <script src="/js/numeral/153/languages.min.js"></script>
+				<script src="/js/punycode/140/punycode.min.js"></script>
                 <script src="../../js/main.js"></script>
 				
             </head>
@@ -135,15 +136,15 @@
         <tr>
             <td>
                 <a>
-                    <xsl:attribute name="title">
-                        <xsl:value-of select="concat('перейти к ', $site)"/>
+                    <xsl:attribute name="class">
+                        <xsl:text>out-link</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="href">
                         <xsl:value-of
                             select="concat('http://',$site)"/>
                     </xsl:attribute>
                     <xsl:value-of select='$site'/>
-                </a>
+				</a>
             </td>
             <td class="duration">            
                 <xsl:value-of select='duration'/>
