@@ -1,0 +1,12 @@
+report.name=day_client_url_download
+report.sql=select * from vr_xml_day_client_url_download where day=? and address=? order by 7 desc
+report.param.day.index=1
+report.param.day.sqltype=91
+report.param.address.index=2
+report.param.address.sqltype=1111
+report.desc=Загрузки по дням,клиентам и ссылкам
+report.xslt.uri=day_client_url_download.xsl
+report.xslt.contentType=text/html; charset=utf-8
+
+
+
