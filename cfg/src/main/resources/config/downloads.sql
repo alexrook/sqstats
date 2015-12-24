@@ -148,3 +148,39 @@ select substring(url from '[^\/]*$'),address,conn_count from vr_day_downloads
     where day='2015-12-20'::date order by 1
 */
 
+/*загрузки по дням и клиентам */
+drop MATERIALIZED view if exists vr_day_client_download cascade;
+create MATERIALIZED view vr_day_client_download
+as
+select
+    day,
+    b.address, -- ip
+    b.name, -- hostname
+	b.description,-- client host description
+	a.duration,
+    a.bytes,
+    a.conn_count
+from
+    (select date_trunc('day',request_date) as day,
+        client_host,
+        sum(duration) as duration,
+        sum(bytes) as bytes,
+        count(url) as conn_count-- всего соединений для определенного url
+    from squidevents a,contenttype b
+    where a.content_type=b.id
+    and b.download=true
+    group by day,client_host) as a,
+    clienthost b
+    where a.client_host=b.id
+    with no data;
+
+REFRESH MATERIALIZED VIEW vr_day_client_download;
+
+-- xml version
+drop view if exists vr_xml_day_client_download;
+create or replace view vr_xml_day_client_download
+as
+select a.*,
+xmlforest(xmlforest(a.day,a.address,a.name,a.description,
+	    a.duration,a.bytes,a.conn_count) as row) as row
+        from vr_day_client_download a;

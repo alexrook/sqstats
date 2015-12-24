@@ -4,7 +4,7 @@ report.param.day.index=1
 report.param.day.sqltype=91
 report.param.address.index=2
 report.param.address.sqltype=1111
-report.desc=Загрузки по дням,клиентам и ссылкам
+report.desc=Загрузки за день, для клиента
 report.xslt.uri=day_client_url_download.xsl
 report.xslt.contentType=text/html; charset=utf-8
 
