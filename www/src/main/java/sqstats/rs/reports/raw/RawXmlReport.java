@@ -53,14 +53,13 @@ public class RawXmlReport implements StreamingOutput, Serializable {
 
     @XmlTransient
     private DataSource dataSource;
-    
-    
-    @XmlTransient 
+
+    @XmlTransient
     private ManagedThreadFactory threadFactory;
 
     @XmlTransient
     private final List<IRawXmlReportEventListener> listeners = new ArrayList<>(1);
-    
+
     private boolean raw;
 
     public boolean isRaw() {
@@ -102,8 +101,6 @@ public class RawXmlReport implements StreamingOutput, Serializable {
     public void setThreadFactory(ManagedThreadFactory threadFactory) {
         this.threadFactory = threadFactory;
     }
-    
-    
 
     public ReportMeta getMeta() {
         return meta;
@@ -208,20 +205,20 @@ public class RawXmlReport implements StreamingOutput, Serializable {
 
         startTag(w, "column", columnAttrs);
 
-        rs.first();
-        do {
+        if (rs.first()) {//true if the cursor is on a valid row; false if there are no rows in the result set
+            do {
 
-            w.append(getLineSeparator());
+                w.append(getLineSeparator());
 
-            Reader r = rs.getSQLXML(columnName).getCharacterStream();
-            int c = r.read();
-            while (c != - 1) {
-                w.append((char) c);
-                c = r.read();
-            }
+                Reader r = rs.getSQLXML(columnName).getCharacterStream();
+                int c = r.read();
+                while (c != - 1) {
+                    w.append((char) c);
+                    c = r.read();
+                }
 
-        } while (rs.next());
-
+            } while (rs.next());
+        }
         endTag(w, "column");
 
     }
