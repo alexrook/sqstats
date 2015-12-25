@@ -111,7 +111,7 @@
                             <th>
                                 Total:
                                 <xsl:value-of select="count(row/url)"/>
-                                sites
+                                urls
                             </th> 
                             <th></th> 
                             <th class="bytes">

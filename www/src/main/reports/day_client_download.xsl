@@ -97,8 +97,8 @@
                         <tr class="info">
                             <th>
                                 Total:
-                                <xsl:value-of select="count(row/url)"/>
-                                sites
+                                <xsl:value-of select="count(row/address)"/>
+                                clients
                             </th>
                             <th></th>
                             <th class="bytes">
