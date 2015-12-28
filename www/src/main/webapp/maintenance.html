@@ -10,12 +10,14 @@
     <link rel="stylesheet" href="../../css/main.css">
 
     <script src="/js/jquery/214/jquery.min.js"></script>
+    <script src="/js/xml2json/115/xml2json.min.js"></script>
+    
     <script src="/css/bootstrap/336/js/bootstrap.min.js"></script>
     <script src="../../js/maintenance.js"></script>
 
     <style>
         .tab-content{
-        padding:3px;
+          padding:3px;
         }
     </style>
 
@@ -41,13 +43,13 @@
                     <a href="#siteMap">Site Map</a>
                 </li>
                 <li role="presentation">
-                    <a href="#downloadList">Download Content-Types</a>
+                    <a data-json-get="downloads" href="#downloadList">Download Content-Types</a>
                 </li>
                 <li role="presentation">
-                    <a href="#reportList">Список отчетов</a>
+                    <a data-json-get="reports" href="#reportList">Список отчетов</a>
                 </li>
                 <li role="presentation">
-                    <a href="#errorList">Список ошибок</a>
+                    <a data-json-get="errors" href="#errorList">Список ошибок</a>
                 </li>
             </ul>
         </div>
