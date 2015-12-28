@@ -75,6 +75,10 @@ public class ReportService {
     private final Map<String, RawXmlReport> reports = new HashMap<>(12);
     private final MapErrorStorage reportErrors = new MapErrorStorage();
 
+    public ManagedThreadFactory getThreadFactory() {
+        return threadFactory;
+    }
+
     public Map<String, ReportError> getErrors() {
 
         checkChanges();
