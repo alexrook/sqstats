@@ -36,7 +36,7 @@ import sqstats.xml.tools.MapWrapper;
 @Path("/xslt")
 public class ReportsRS extends AbstractRS {
 
-    public static String NAME_ERR_XSL = "simple.xsl",
+    public static String NAME_ERR_XSL = "errors.xsl",
             NAME_REPORT_XSL = "simple.xsl";//todo
 
     @EJB

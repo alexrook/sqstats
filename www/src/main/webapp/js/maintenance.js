@@ -3,8 +3,10 @@
 /*
  * get raw xml from server and render it
  */
-function getTabData(url) {
-    console.log(url);    
+function getTabData(url,tab) {
+    console.log(tab); 
+    console.log(url); 
+   $(tab).load( "rs/xslt/"+url );
 }
 
 $(function() {
@@ -14,7 +16,7 @@ $(function() {
         var active=$(this).parent().hasClass('active');
         console.log(active);
         if (!active) {
-            getTabData($(this).attr('data-json-get'));
+            getTabData($(this).attr('data-json-get'),$(this).attr('href'));
         }
         
     });
