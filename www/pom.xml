@@ -14,10 +14,11 @@
     <packaging>war</packaging>
     <name>squid-stats-www</name>
 
+
     <properties>
         <!-- this charm my ide -->
         <org-netbeans-modules-maven-jaxws.rest_2e_config_2e_type>ide</org-netbeans-modules-maven-jaxws.rest_2e_config_2e_type>
-	<netbeans.hint.jdkPlatform>Open_JDK_1.7</netbeans.hint.jdkPlatform>
+        <netbeans.hint.jdkPlatform>Open_JDK_1.7</netbeans.hint.jdkPlatform>
         <org-netbeans-modules-web-clientproject-api.js_2e_libs_2e_folder>js/libs</org-netbeans-modules-web-clientproject-api.js_2e_libs_2e_folder>
     </properties>
 
@@ -78,6 +79,15 @@
                             <filtering>true</filtering>
                         </resource>   
                     </webResources>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>1.1.0.Alpha5</version>
+                <configuration>
+                    
                 </configuration>
             </plugin>
 
