@@ -6,7 +6,7 @@
     
     <xsl:template match='/'>
         <table class="table"> 
-            <thead> 
+             <thead> 
                 <tr> 
                     <th>Report Name</th> 
                     <th>Msg</th> 
@@ -27,7 +27,7 @@
             <td class="col-md-1">
                 <xsl:value-of select='value/msg'/>
             </td> 
-            <td class="col-md-5">
+            <td class="col-md-7">
                 <textarea class="form-control" readonly="true" palceholder=".col-md-4">
                     <xsl:value-of select='value/stackTrace'/>
                 </textarea>
