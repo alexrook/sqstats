@@ -5,7 +5,12 @@
     <xsl:output omit-xml-declaration="yes" method="html"/>
     
     <xsl:template match='/'>
-        <table class="table table-striped"> 
+        <table class="table table-striped table-bordered"> 
+            <caption>
+                <span class="label label-info pull-right">
+                    Список Отчетов
+                </span>
+            </caption>
             <thead> 
                 <tr> 
                     <th>Report Name</th> 
@@ -36,9 +41,9 @@
                 <xsl:value-of select='key'/>
             </td> 
             <td class="col-md-3">
-                    <code>
-                        <xsl:value-of select='value/meta/statement'/>
-                    </code>
+                <code>
+                    <xsl:value-of select='value/meta/statement'/>
+                </code>
             </td> 
             <td class="col-md-5">
                 <xsl:apply-templates select="value/meta/params"/>

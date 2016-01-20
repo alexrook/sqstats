@@ -5,7 +5,12 @@
     <xsl:output omit-xml-declaration="yes" method="html"/>
     
     <xsl:template match='/'>
-        <table class="table"> 
+        <table class="table table-striped table-bordered"> 
+            <caption>
+                <span class="label label-info pull-right">
+                    Список Ошибок
+                </span>
+            </caption>
              <thead> 
                 <tr> 
                     <th>Report Name</th> 

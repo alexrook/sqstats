@@ -5,7 +5,12 @@
     <xsl:output omit-xml-declaration="yes" method="html"/>
     
     <xsl:template match='/'>
-        <table class="table table-striped"> 
+        <table class="table table-striped table-bordered"> 
+            <caption>
+                <span class="label label-info pull-right">
+                    Download Content Types
+                </span>
+            </caption>
             <thead> 
                 <tr> 
                     <th>Content Type</th> 
