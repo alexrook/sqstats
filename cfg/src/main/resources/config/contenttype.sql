@@ -143,9 +143,9 @@ copy  contentType(parentId,value,description) from stdin;
 9	video/mpeg	MPEG-1 (RFC 2045 и RFC 2046)
 9	video/mp4	MP4 (RFC 4337)
 9	video/ogg	Ogg Theora или другое видео (RFC 5334)
-9	video/quicktime	QuickTime[11]
+9	video/quicktime	QuickTime
 9	video/webm	WebM
-9	video/x-ms-wmv	Windows Media Video[5]
+9	video/x-ms-wmv	Windows Media Video
 9	video/x-flv	FLV
 9	video/3gpp	.3gpp .3gp
 9	video/3gpp2	.3gpp2 .3g2 

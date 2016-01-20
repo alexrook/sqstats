@@ -1,0 +1,8 @@
+report.name=download_content_types
+report.sql=select * from vr_xml_download_content_types
+report.desc=Download Content-Types
+report.xslt.uri=download_content_types.xsl
+report.xslt.contentType=text/html; charset=utf-8
+
+
+

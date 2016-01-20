@@ -21,7 +21,7 @@
     
     <xsl:template match='entry'>
         <tr> 
-            <td class="col-md-1">
+            <td class="col-md-2">
                 <xsl:value-of select='key'/>
             </td> 
             <td class="col-md-1">

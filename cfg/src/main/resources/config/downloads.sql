@@ -184,3 +184,16 @@ select a.*,
 xmlforest(xmlforest(a.day,a.address,a.name,a.description,
 	    a.duration,a.bytes,a.conn_count) as row) as row
         from vr_day_client_download a;
+
+
+--download Content-Types
+drop view if exist vr_xml_download_content_types;
+create or replace view vr_xml_download_content_types
+as
+select a.*,
+        xmlforest(xmlforest(a.value,a.description) as row) as row
+        from contenttype a 
+        where a.download=true
+        and not parentId is null
+        order by a.value;
+        

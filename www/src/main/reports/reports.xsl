@@ -36,9 +36,9 @@
                 <xsl:value-of select='key'/>
             </td> 
             <td class="col-md-3">
-                <code>
-                    <xsl:value-of select='value/meta/statement'/>
-                </code>
+                    <code>
+                        <xsl:value-of select='value/meta/statement'/>
+                    </code>
             </td> 
             <td class="col-md-5">
                 <xsl:apply-templates select="value/meta/params"/>

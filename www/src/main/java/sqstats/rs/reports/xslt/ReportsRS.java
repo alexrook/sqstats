@@ -37,7 +37,8 @@ import sqstats.xml.tools.MapWrapper;
 public class ReportsRS extends AbstractRS {
 
     public static String NAME_ERR_XSL = "errors.xsl",
-            NAME_REPORT_XSL = "reports.xsl";//todo
+            NAME_REPORT_XSL = "reports.xsl",
+            NAME_DOWNLOADS_REPORT = "download_content_types";
 
     @EJB
     ReportService reportService;
@@ -57,6 +58,24 @@ public class ReportsRS extends AbstractRS {
             passReportParams(report, uriInfo.getQueryParameters());
 
             return Response.ok(report).type(report.getXsltMeta().getContentType()).build();
+
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+    }
+
+    @GET
+    @Path("downloads")
+    @Produces(MediaType.TEXT_HTML)
+    public Response getDownloads() {
+
+        Report report = reportService.getReport(NAME_DOWNLOADS_REPORT);
+
+        if (report != null) {
+
+            report.setRaw(false);
+            return Response.ok(report).build();
 
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
