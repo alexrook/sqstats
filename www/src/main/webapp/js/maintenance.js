@@ -1,27 +1,30 @@
 'use strict';
 
 /*
- * get raw xml from server and render it
+ * get html from server and render it
  */
-function getTabData(url, tab) {
-    console.log(tab);
-    console.log(url);
+function getTabData(a) {
+    var tab = $(a).attr('href');
+    var url = $(a).attr('data-json-get');
     $(tab).load("rs/xslt/" + url);
+
 }
 
 $(function () {
 
-    //first this
-    $('#myTabs a[data-json-get]').click(function (e) {
+    $('#myTabs a[data-json-get]').click(function () { //click handle
         var active = $(this).parent().hasClass('active');
-        console.log(active);
         if (!active) {
-            getTabData($(this).attr('data-json-get'), $(this).attr('href'));
+            getTabData(this);
         }
-
+    }).each(function () {//first time setup
+        var active = $(this).parent().hasClass('active');
+        if (active) {
+            getTabData(this);
+        }
     });
 
-    $('#myTabs a').click(function (e) {
+    $('#myTabs a').click(function (e) {//ajax&static tabs
         e.preventDefault();
         $(this).tab('show');
     });
