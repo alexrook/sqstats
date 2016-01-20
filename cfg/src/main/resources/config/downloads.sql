@@ -38,7 +38,7 @@ update contenttype set download=true where value='application/x-tar';
 -- sqstats collected
 /*select 'update contenttype set download=true where value='''||value||''';'
 from contenttype where parentId=12 and download=false order by 1;*/
- update contenttype set download=true where value='1';
+ --update contenttype set download=true where value='1';
  update contenttype set download=true where value='application/docx';
  update contenttype set download=true where value='application/download';
  update contenttype set download=true where value='application/force-download';
