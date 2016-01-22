@@ -1,0 +1,20 @@
+.tab-content{
+    padding:3px;
+}
+
+table ul {
+    list-style-type:none;
+    padding-left:3px;
+}
+
+table code {
+    padding-left:0px;
+}
+
+var {
+    color:blue;
+}
+
+code:empty {
+    display:none;
+}

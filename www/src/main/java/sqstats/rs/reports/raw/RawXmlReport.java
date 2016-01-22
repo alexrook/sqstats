@@ -60,6 +60,7 @@ public class RawXmlReport implements StreamingOutput, Serializable {
     @XmlTransient
     private final List<IRawXmlReportEventListener> listeners = new ArrayList<>(1);
 
+    @XmlTransient
     private boolean raw;
 
     public boolean isRaw() {

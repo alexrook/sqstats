@@ -1,10 +1,14 @@
 package sqstats.rs;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import javax.ws.rs.core.MultivaluedMap;
 import sqstats.rs.reports.raw.RawXmlReport;
 import sqstats.rs.reports.xml.ReportMeta;
-
 
 /**
  *
@@ -55,5 +59,16 @@ public class AbstractRS {
         }
 
     }
-   
+
+    protected InputStream getFileInputStream(String name) throws IOException {
+        
+        File file =new File(name);
+        
+        if (!file.isAbsolute()) {
+            file=new File(Utils.getProperty("reports.dir")+"/"+file.getPath());
+        }
+        
+        return new BufferedInputStream(new FileInputStream(file));
+    }
+
 }

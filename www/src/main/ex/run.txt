@@ -1,4 +1,0 @@
-# some learnig examples
-#for examples&tests
->java -cp "/opt/xalan/272/*" org.apache.xalan.xslt.Process -IN xxx.xml -XSL sss.xlt -OUT ooo.xml  <-xsltc>
-

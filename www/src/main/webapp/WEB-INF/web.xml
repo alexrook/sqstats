@@ -5,31 +5,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
-
-    <filter>
-        <description>
-            This filter wraps CORS and JSONP requests.
-            Mainly for debugging purposes.
-            Note: this opens a security hole on the site
-        </description>
-        <filter-name>CORSandJSONPFilter</filter-name>
-        <filter-class>sqstats.rs.filters.CORSandJSONPFilter</filter-class>
-        <init-param>
-            <param-name>JSONPParameter</param-name>
-            <param-value>jsonp</param-value>
-        </init-param>
-        <init-param>
-            <param-name>exposeHeadersList</param-name>
-            <param-value>x-content-range</param-value>
-        </init-param>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>CORSandJSONPFilter</filter-name>
-        <url-pattern>/rs/*</url-pattern>
-    </filter-mapping>
-
-
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
