@@ -1,0 +1,12 @@
+report.name=week_sums_site
+report.sql=select * from vr_xml_week_sums_site where week=?
+report.param.week.index=1
+report.param.week.sqltype=91
+report.desc=Итоги за неделю по сайтам
+report.xslt.uri=week_sums_site.xsl
+report.xslt.contentType=text/html; charset=utf-8
+
+
+
+
+

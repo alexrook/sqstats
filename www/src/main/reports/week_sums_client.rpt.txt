@@ -1,0 +1,7 @@
+report.name=week_sums_client
+report.sql=select * from vr_xml_week_sums_client where week=? order by 6 desc
+report.param.week.index=1
+report.param.week.sqltype=91
+report.desc=Итоги за неделю по клиентам
+report.xslt.uri=week_sums_client.xsl
+report.xslt.contentType=text/html; charset=utf-8

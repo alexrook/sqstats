@@ -82,7 +82,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>День</th>
+                            <th>Неделя</th>
                             <th>duration</th>
                             <th>bytes</th>
                             <th>Число соединений</th>
@@ -92,8 +92,8 @@
                         <tr class="info">
                             <th>
                                 Total:
-                                <xsl:value-of select="count(row/day)"/>
-                                days
+                                <xsl:value-of select="count(row/week)"/>
+                                weeks
                             </th>
                             <th/>
                             <th class="bytes">
@@ -112,7 +112,7 @@
         </div>
     </xsl:template>
     <xsl:template match="row">
-        <xsl:variable name="date" select="substring-before(day,'T')"/>
+        <xsl:variable name="date" select="substring-before(week,'T')"/>
         <xsl:variable name="bytes" select="bytes"/>
         <tr>
             <td>
@@ -121,10 +121,10 @@
                     <li>
                         <a>
                             <xsl:attribute name="title">
-                                <xsl:value-of select="concat('итоги за ',$date,' по пользователям')"/>
+                                <xsl:value-of select="concat('итоги за неделю перед ',$date,' по пользователям')"/>
                             </xsl:attribute>
                             <xsl:attribute name="href">
-                                <xsl:value-of select="concat('day_sums_client?day=',$date)"/>
+                                <xsl:value-of select="concat('week_sums_client?week=',$date)"/>
                             </xsl:attribute>
                             <span class="glyphicon glyphicon-user"></span>
                         </a>
@@ -132,10 +132,10 @@
                     <li>
                         <a>
                             <xsl:attribute name="title">
-                                <xsl:value-of select="concat('загрузки за ',$date)"/>
+                                <xsl:value-of select="concat('загрузки за неделю на ',$date)"/>
                             </xsl:attribute>
                             <xsl:attribute name="href">
-                                <xsl:value-of select="concat('day_client_download?day=',$date)"/>
+                                <xsl:value-of select="concat('week_client_download?week=',$date)"/>
                             </xsl:attribute>
                             <span class="glyphicon glyphicon-cloud-download"></span>
                         </a>
@@ -149,10 +149,10 @@
             <td>
                 <a class="bytes">
                     <xsl:attribute name="title">
-                        <xsl:value-of select="concat('итоги за ',$date,' по сайтам')"/>
+                        <xsl:value-of select="concat('итоги за неделю перед ',$date,' по сайтам')"/>
                     </xsl:attribute>
                     <xsl:attribute name="href">
-                        <xsl:value-of select="concat('day_sums_site?day=',$date)"/>
+                        <xsl:value-of select="concat('week_sums_site?week=',$date)"/>
                     </xsl:attribute>
                     <xsl:value-of select="$bytes"/>
                 </a>

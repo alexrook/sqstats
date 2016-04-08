@@ -13,7 +13,7 @@ select date_trunc('day',request_date) as day,/* дата */
 	count(client_host) as conn_count /*всего соединений за один день*/
     from squidevents group by day;
 
----xml version for reserch purpose
+---xml version 
 drop view if exists vr_xml_day_sums ;
 create or replace view vr_xml_day_sums
 as

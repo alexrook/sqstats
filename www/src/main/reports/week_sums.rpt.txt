@@ -1,0 +1,5 @@
+report.name=week_sums
+report.sql=select * from vr_xml_week_sums order by 1 desc
+report.desc=Итоги по неделям
+report.xslt.uri=week_sums.xsl
+report.xslt.contentType=text/html; charset=utf-8
