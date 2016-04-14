@@ -1,9 +1,9 @@
 package sqstats.rs.reports;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Singleton;
@@ -72,7 +72,7 @@ public class ReportService {
 
     ServiceLoader<IReportMetaLoader> slReportMetaLoader;
 
-    private final Map<String, RawXmlReport> reports = new HashMap<>(12);
+    private final Map<String, RawXmlReport> reports = new TreeMap<>();
     private final MapErrorStorage reportErrors = new MapErrorStorage();
 
     public ManagedThreadFactory getThreadFactory() {
