@@ -1,0 +1,11 @@
+report.name=month_client_download
+report.sql=select * from vr_xml_month_client_download where month=? order by bytes desc
+report.param.month.index=1
+report.param.month.sqltype=91
+report.desc=Загрузки за месяц, по клиентам
+report.xslt.uri=month_client_download.xsl
+report.xslt.contentType=text/html; charset=utf-8
+
+
+
+

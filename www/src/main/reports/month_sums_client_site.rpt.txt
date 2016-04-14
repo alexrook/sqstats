@@ -1,0 +1,12 @@
+report.name=month_sums_client_site
+report.sql=select * from vr_xml_month_sums_client_site where month=? and address=?
+report.param.month.index=1
+report.param.month.sqltype=91
+report.param.address.index=2
+report.param.address.sqltype=1111
+report.desc=Итоги за месяц для клиента по сайтам
+report.xslt.uri=month_sums_client_site.xsl
+report.xslt.contentType=text/html; charset=utf-8
+
+
+

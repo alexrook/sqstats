@@ -1,0 +1,12 @@
+report.name=month_sums_site
+report.sql=select * from vr_xml_month_sums_site where month=?
+report.param.month.index=1
+report.param.month.sqltype=91
+report.desc=Итоги за месяц по сайтам
+report.xslt.uri=month_sums_site.xsl
+report.xslt.contentType=text/html; charset=utf-8
+
+
+
+
+
