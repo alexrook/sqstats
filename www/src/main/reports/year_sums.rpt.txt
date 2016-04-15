@@ -1,0 +1,5 @@
+report.name=year_sums
+report.sql=select * from vr_xml_year_sums order by 1 desc
+report.desc=Итоги по годам
+report.xslt.uri=year_sums.xsl
+report.xslt.contentType=text/html; charset=utf-8

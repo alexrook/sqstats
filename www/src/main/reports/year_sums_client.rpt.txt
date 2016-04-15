@@ -1,0 +1,7 @@
+report.name=year_sums_client
+report.sql=select * from vr_xml_year_sums_client where year=? order by 6 desc
+report.param.year.index=1
+report.param.year.sqltype=91
+report.desc=Итоги за год по клиентам
+report.xslt.uri=year_sums_client.xsl
+report.xslt.contentType=text/html; charset=utf-8

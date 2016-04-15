@@ -1,0 +1,11 @@
+report.name=year_client_download
+report.sql=select * from vr_xml_year_client_download where year=? order by bytes desc
+report.param.year.index=1
+report.param.year.sqltype=91
+report.desc=Загрузки за год, по клиентам
+report.xslt.uri=year_client_download.xsl
+report.xslt.contentType=text/html; charset=utf-8
+
+
+
+
