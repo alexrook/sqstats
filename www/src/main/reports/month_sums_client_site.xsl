@@ -33,13 +33,13 @@
                     <li>
                         <a>
                             <xsl:attribute name="title">
-                                <xsl:value-of select="concat('итоги за месяц перед ',$date,' по клиентам')"/>
+                                <xsl:value-of select="concat('итоги за месяц начиная с ',$date,' по клиентам')"/>
                             </xsl:attribute>
                             <xsl:attribute name="href">
                                 <xsl:value-of
                                     select="concat('month_sums_client?month=',$date)"/>
                             </xsl:attribute>
-                            Итоги за месяц перед <xsl:value-of select="$date"/>
+                            Итоги за месяц начиная с <xsl:value-of select="$date"/>
                         </a>
 						
                     </li>

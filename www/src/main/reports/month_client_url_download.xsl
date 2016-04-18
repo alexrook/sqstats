@@ -33,7 +33,7 @@
                     <li>
                         <a>
                             <xsl:attribute name="title">
-                                <xsl:value-of select="concat('Загрузки за месяц перед ',$date,' по клиентам')"/>
+                                <xsl:value-of select="concat('Загрузки за месяц начиная с ',$date,' по клиентам')"/>
                             </xsl:attribute>
                             <xsl:attribute name="href">
                                 <xsl:value-of

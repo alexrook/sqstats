@@ -121,7 +121,7 @@
                     <li>
                         <a>
                             <xsl:attribute name="title">
-                                <xsl:value-of select="concat('итоги за неделю перед ',$date,' по пользователям')"/>
+                                <xsl:value-of select="concat('итоги за неделю начиная с ',$date,' по пользователям')"/>
                             </xsl:attribute>
                             <xsl:attribute name="href">
                                 <xsl:value-of select="concat('week_sums_client?week=',$date)"/>
@@ -132,7 +132,7 @@
                     <li>
                         <a>
                             <xsl:attribute name="title">
-                                <xsl:value-of select="concat('загрузки за неделю на ',$date)"/>
+                                <xsl:value-of select="concat('загрузки за неделю начиная с ',$date)"/>
                             </xsl:attribute>
                             <xsl:attribute name="href">
                                 <xsl:value-of select="concat('week_client_download?week=',$date)"/>
@@ -149,7 +149,7 @@
             <td>
                 <a class="bytes">
                     <xsl:attribute name="title">
-                        <xsl:value-of select="concat('итоги за неделю перед ',$date,' по сайтам')"/>
+                        <xsl:value-of select="concat('итоги за неделю начиная с ',$date,' по сайтам')"/>
                     </xsl:attribute>
                     <xsl:attribute name="href">
                         <xsl:value-of select="concat('week_sums_site?week=',$date)"/>

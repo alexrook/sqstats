@@ -124,7 +124,7 @@
             <td>
                 <a>
                     <xsl:attribute name="title">
-                        <xsl:value-of select="concat('итоги за месяц перед ',$date,' для ',address,' по сайтам')"/>
+                        <xsl:value-of select="concat('итоги за месяц начиная с ',$date,' для ',address,' по сайтам')"/>
                     </xsl:attribute>
                     <xsl:attribute name="href">
                         <xsl:value-of
