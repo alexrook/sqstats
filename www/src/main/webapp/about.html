@@ -28,21 +28,29 @@
             <div class="page-header">
                 <h1>Статистика Squid</h1>
             </div>
-            <p class="lead">Создано VKEK IT Department под влиянием утилиты <a href="http://sourceforge.net/projects/sarg/">Sarg</a>,
-                исходный код доступен на <a href="https://github.com/alexrook/sqstats">GitHub</a></p>
+            <p class="lead">Создано VKEK IT Department под влиянием утилиты 
+		<a href="http://sourceforge.net/projects/sarg/">Sarg</a>,
+                исходный код доступен на <a href="https://github.com/alexrook/sqstats">GitHub</a>
+		</p>
             <ul>
                 <li>Данные загружаются с двух экземпляров 
                     <a href="http://www.squid-cache.org/">Squid</a>
                     в PostgreSQL в соответствии с 
                     <a href="http://wiki.squid-cache.org/Features/LogFormat#Default_Formats">Squid default log format</a></li>
-                <li>Расчет итогов производится ежесуточно, по /etc/cron.daily, 
-                    поэтому итоги для текущих суток не репрезентативны</li>
+                <li>Расчет итогов производится ежесуточно, еженедельно, ежемесячно
+		     по /etc/cron.(daily,weekly,monthly), 
+                    поэтому итоги для текущих суток, недели, месяца не репрезентативны.
+		    Итоги за год вычисляются ежемесячно, 
+		    поэтому верны для прошлых лет,
+		    а для текущего года - как накопительные на начало текущего месяца.</li>
                 <li>Суммы байт учитывают, в том числе, обмен траффиком между Squid и клиентом</li>
+		<li>Загрузки считаются для Content-Type's отмеченных как download.
+		    See maintenance->download content-types or contenttype relation.</li>
             </ul>
         </div>
 
         <footer>
-            <p>2015 VKEK IT Dept</p>
+            <p>2016 VKEK IT Dept</p>
         </footer>
 
     </body>
