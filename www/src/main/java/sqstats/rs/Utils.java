@@ -58,6 +58,10 @@ public class Utils {
         return getOtherBoolProperty(name, getInstance().data);
     }
 
+    public static String tryProperty(String names) throws IOException {
+        return tryProperty(names, getInstance().data);
+    }
+
     public static String tryProperty(String name, Properties props) throws IOException {
 
         String result = props.getProperty(name);
@@ -67,6 +71,10 @@ public class Utils {
         }
 
         throw new IOException("property " + name + " not found");
+    }
+
+    public static String tryPropertyNotEmpty(String name) throws IOException {
+        return tryPropertyNotEmpty(name, getInstance().data);
     }
 
     public static String tryPropertyNotEmpty(String name, Properties props) throws IOException {
