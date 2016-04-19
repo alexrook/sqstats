@@ -22,7 +22,7 @@ import sqstats.rs.reports.xslt.Report;
 @Singleton
 public class ReportService {
 
-    public static final int MAX_ERRORS_SIZE = 7;
+    public static final int MAX_ERRORS_SIZE = 33;
 
     public static class MapErrorStorage
             implements IReportMetaLoader.IReportErrorStorage,
