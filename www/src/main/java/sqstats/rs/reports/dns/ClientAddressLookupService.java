@@ -36,9 +36,7 @@ public class ClientAddressLookupService {
      *
      */
     @Schedule(dayOfWeek = "*", //see http://docs.oracle.com/javaee/6/tutorial/doc/bnboy.html
-            hour = "*",
-            minute = "*",
-            second = "1",
+            hour = "5",
             persistent = false)
     public void lookupAddresses() {
 
