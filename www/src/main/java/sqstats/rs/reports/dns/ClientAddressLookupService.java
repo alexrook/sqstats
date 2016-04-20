@@ -16,6 +16,9 @@ import sqstats.rs.reports.xml.ReportError;
 
 /**
  * @author moroz
+ *
+ * Обновляет информацию об dns-именах для ip-адресов по расписанию
+ *
  */
 @Stateless
 public class ClientAddressLookupService {
@@ -26,45 +29,81 @@ public class ClientAddressLookupService {
     @EJB
     ReportService reportService;
 
-    @Schedule(dayOfWeek = "*",
-            month = "*",
-            hour = "9-17",
-            dayOfMonth = "*",
-            year = "*",
+    /**
+     * По расписанию, из clientAddressStorage, берет список ip-адресов для
+     * которых не указанны dns-имена, и пытается разрешить их через dns.
+     * Сохраняет разрешенные имена в clientAddressStorage
+     *
+     */
+    @Schedule(dayOfWeek = "*", //see http://docs.oracle.com/javaee/6/tutorial/doc/bnboy.html
+            hour = "*",
             minute = "*",
-            second = "0",
+            second = "1",
             persistent = false)
-    public void lookupAddress() {
+    public void lookupAddresses() {
 
         try {
             List<String> clientAddresses = clientAddressStorage.getClientsAddresses();
-            Map<String, String> updatetCliAddrs = new HashMap<>();
-            for (String address : clientAddresses) {
-                try {
-
-                    InetAddress ia = InetAddress.getByName(address);
-
-                    if (!address.equalsIgnoreCase(ia.getCanonicalHostName())) {
-                        updatetCliAddrs.put(address, ia.getCanonicalHostName());
-                    }
-
-                } catch (UnknownHostException ex) {
-                    String msg = "unknown host exception for address:" + address;
-                    reportService.addError(address,
-                            new ReportError(ex, msg));
-                    Logger.getLogger(ClientAddressLookupService.class.getName()).log(Level.SEVERE, msg);
-                }
-
-            }
-
-            clientAddressStorage.updateClientAddreses(updatetCliAddrs);
-
+            int rows = clientAddressStorage.updateClientAddreses(lookupDNS(clientAddresses));
+            Logger.getLogger(ClientAddressLookupService.class
+                    .getName()).log(Level.INFO, "updated {0} clients addresses", rows);
         } catch (IClientAddressStorage.ClientAddressStorageException ex) {
             String msg = "ClientAddressStorageException, check app configuration";
             reportService.addError("ClientAddressStorageException",
                     new ReportError(ex, msg));
-            Logger.getLogger(ClientAddressLookupService.class.getName()).log(Level.SEVERE, msg);
+            Logger.getLogger(ClientAddressLookupService.class.getName()).log(Level.SEVERE, msg + ": {0}", ex.getMessage());
         }
+
+    }
+
+    /**
+     *
+     * Для синхронизации с DNS. По расписанию, из clientAddressStorage, берет
+     * список всех ip-адресов и пытается разрешить их через dns. Сохраняет
+     * разрешенные имена в clientAddressStorage.
+     *
+     */
+    @Schedule(dayOfWeek = "5",
+            hour = "21",
+            persistent = false)
+    public void updateAllAddresses() {
+
+        try {
+            List<String> clientAddresses = clientAddressStorage.getAllClientsAddresses();
+            int rows = clientAddressStorage.updateClientAddreses(lookupDNS(clientAddresses));
+            Logger.getLogger(ClientAddressLookupService.class
+                    .getName()).log(Level.INFO, "updated {0} all clients addresses", rows);
+        } catch (IClientAddressStorage.ClientAddressStorageException ex) {
+            String msg = "ClientAddressStorageException, check app configuration";
+            reportService.addError("ClientAddressStorageException",
+                    new ReportError(ex, msg));
+            Logger.getLogger(ClientAddressLookupService.class.getName()).log(Level.SEVERE, msg + ": {0}", ex.getMessage());
+        }
+
+    }
+
+    private Map<String, String> lookupDNS(List<String> clientAddresses) {
+        Map<String, String> updatedCliAddrs = new HashMap<>();
+        for (String address : clientAddresses) {
+
+            try {
+
+                InetAddress ia = InetAddress.getByName(address);
+
+                if (!address.equalsIgnoreCase(ia.getCanonicalHostName())) {
+                    updatedCliAddrs.put(address, ia.getCanonicalHostName());
+                }
+
+            } catch (UnknownHostException ex) {
+                String msg = "unknown host exception for address:" + address;
+                reportService.addError(address,
+                        new ReportError(ex, msg));
+                Logger.getLogger(ClientAddressLookupService.class.getName()).log(Level.SEVERE, msg);
+            }
+
+        }
+
+        return updatedCliAddrs;
 
     }
 
