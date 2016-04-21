@@ -27,9 +27,13 @@ function punycodeIt(args) {
     
 }
 
+function setupTableSorter(){
+    $("#reportTable").tablesorter(); 
+}
+
 
 $(function() {
-    
+    setupTableSorter();
     formatNumbers();
     punycodeIt();
     
