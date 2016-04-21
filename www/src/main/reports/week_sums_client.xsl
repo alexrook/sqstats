@@ -120,17 +120,27 @@
         <xsl:variable name="date" select="substring-before(week,'T')"/>
         <xsl:variable name="address" select='address'/>
         <xsl:variable name="bytes" select='bytes'/>
+         <xsl:variable name="dnsname">
+            <xsl:choose>
+                <xsl:when test='name'>
+                    <xsl:value-of  select='name'/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select='$address'/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <tr>
             <td>
                 <a>
                     <xsl:attribute name="title">
-                        <xsl:value-of select="concat('итоги за неделю начиная с ',$date,' для ',address,' по сайтам')"/>
+                        <xsl:value-of select="concat('итоги за неделю начиная с ',$date,' для ',$dnsname,' по сайтам')"/>
                     </xsl:attribute>
                     <xsl:attribute name="href">
                         <xsl:value-of
                             select="concat('week_sums_client_site?week=',$date,'&amp;address=',$address)"/>
                     </xsl:attribute>
-                    <xsl:value-of select='$address'/>
+                    <xsl:value-of select='$dnsname'/>
                 </a>
             </td>
             <td class="duration">            

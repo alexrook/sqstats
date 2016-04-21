@@ -121,17 +121,27 @@
         <xsl:variable name="date" select="substring-before(month,'T')"/>
         <xsl:variable name="bytes" select='bytes'/>
         <xsl:variable name="address" select='address'/>
+        <xsl:variable name="dnsname">
+            <xsl:choose>
+                <xsl:when test='name'>
+                    <xsl:value-of  select='name'/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select='$address'/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <tr>
             <td>
                 <a>
                     <xsl:attribute name="title">
-                        <xsl:value-of select="concat('загрузки для ',address, ' за ',$date)"/>
+                        <xsl:value-of select="concat('загрузки для ',$dnsname, ' за ',$date)"/>
                     </xsl:attribute>
                     <xsl:attribute name="href">
                         <xsl:value-of
-                                select="concat('month_client_url_download?month=',$date,'&amp;address=',$address)"/>
+                            select="concat('month_client_url_download?month=',$date,'&amp;address=',$address)"/>
                     </xsl:attribute>
-                    <xsl:value-of select='$address'/>
+                    <xsl:value-of select='$dnsname'/>
                 </a>
             </td>
             <td class="duration">

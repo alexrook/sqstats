@@ -120,9 +120,19 @@
         <xsl:variable name="date" select="substring-before(year,'T')"/>
         <xsl:variable name="address" select='address'/>
         <xsl:variable name="bytes" select='bytes'/>
+         <xsl:variable name="dnsname">
+            <xsl:choose>
+                <xsl:when test='name'>
+                    <xsl:value-of  select='name'/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select='$address'/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <tr>
             <td>
-                <xsl:value-of select='$address'/>
+                <xsl:value-of select='$dnsname'/>
             </td>
             <td class="duration">            
                 <xsl:value-of select='duration'/>

@@ -14,10 +14,10 @@
                 <link rel="stylesheet" href="/css/bootstrap/336/css/bootstrap.min.css"/>
                 <link rel="stylesheet" href="../../css/main.css"/>
 				
-				<script src="/js/jquery/214/jquery.min.js"></script>
+                <script src="/js/jquery/214/jquery.min.js"></script>
                 <script src="/js/numeral/153/numeral.min.js"></script>
                 <script src="/js/numeral/153/languages.min.js"></script>
-				<script src="/js/punycode/140/punycode.min.js"></script>
+                <script src="/js/punycode/140/punycode.min.js"></script>
                 <script src="../../js/main.js"></script>
 				
             </head>
@@ -120,17 +120,27 @@
         <xsl:variable name="date" select="substring-before(day,'T')"/>
         <xsl:variable name="address" select='address'/>
         <xsl:variable name="bytes" select='bytes'/>
+        <xsl:variable name="dnsname">
+            <xsl:choose>
+                <xsl:when test='name'>
+                    <xsl:value-of  select='name'/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select='$address'/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <tr>
             <td>
                 <a>
                     <xsl:attribute name="title">
-                        <xsl:value-of select="concat('итоги за ',$date,' для ',address,' по сайтам')"/>
+                        <xsl:value-of select="concat('итоги за ',$date,' для ',$dnsname,' по сайтам')"/>
                     </xsl:attribute>
                     <xsl:attribute name="href">
                         <xsl:value-of
                             select="concat('day_sums_client_site?day=',$date,'&amp;address=',$address)"/>
                     </xsl:attribute>
-                    <xsl:value-of select='$address'/>
+                    <xsl:value-of select='$dnsname'/>
                 </a>
             </td>
             <td class="duration">            

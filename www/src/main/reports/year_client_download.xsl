@@ -121,12 +121,22 @@
 	<xsl:variable name="dyear" select="substring-before($date,'-')"/>
         <xsl:variable name="bytes" select='bytes'/>
         <xsl:variable name="address" select='address'/>
+         <xsl:variable name="dnsname">
+            <xsl:choose>
+                <xsl:when test='name'>
+                    <xsl:value-of  select='name'/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select='$address'/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <tr>
             <td>
                 <xsl:attribute name="title">
-                    <xsl:value-of select="concat('загрузки для ',address, ' за ',$dyear,' год')"/>
+                    <xsl:value-of select="concat('загрузки для ',$dnsname, ' за ',$dyear,' год')"/>
                 </xsl:attribute>
-                <xsl:value-of select='$address'/>
+                <xsl:value-of select='$dnsname'/>
             </td>
             <td class="duration">
                 <xsl:value-of select='duration'/>
