@@ -30,3 +30,20 @@ begin
 end;
 $$ 
 language plpgsql;
+
+drop materialized view if exists vr_reports_base cascade;
+create materialized view vr_reports_base
+as
+select id,
+date_trunc('day',request_date) as day,
+date_trunc('week',request_date) as week, 
+date_trunc('month',request_date) as month,
+date_part('year',request_date) as year,
+gethostnamefromurl(url) as url 
+from squidevents
+with no data;
+
+refresh materialized view vr_reports_base;
+
+
+
