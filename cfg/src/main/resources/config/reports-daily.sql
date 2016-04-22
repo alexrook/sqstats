@@ -47,37 +47,6 @@ select a.*,xmlforest(xmlforest(a.day,a.address,a.name,a.description,
 	a.duration,a.bytes,a.conn_count) as row) as row
         from vr_day_sums_client a;
 
---todo: week month
-
-/* select method,(select regexp_matches(url,'^(https?:\/\/)?(www\.)?([a-zA-Z0-9\.\-\_]*)')) 
-    from squid_events where id>87000; */
-
-drop function if exists getHostNameFromUrl(varchar) cascade;
-create or replace function getHostNameFromUrl(url varchar) 
-returns varchar 
-as
-$$
-declare 
-    result varchar(2028)='';
-begin
-    /*
-	http://www.postgresql.org/docs/9.3/interactive/functions-matching.html#FUNCTIONS-POSIX-REGEXP
-	It is possible to force regexp_matches() to always return one row by using a sub-select; 
-	this is particularly useful in a SELECT target list when you want all rows returned, even non-matching ones
-	https://en.wikipedia.org/wiki/Hostname
-    */
-
-    result=(select regexp_matches(url,'^(https?:\/\/)?(www\.)?([a-zA-Z0-9\.\-\_]*)'))[3];
-
-    if char_length(result)>0  then
-	return trim(result);
-    end if;
-
-    return 'request error';    
-end;
-$$ 
-language plpgsql;
-
 /*итоги за день по клиентам и сайтам*/
 drop MATERIALIZED view if exists vr_day_sums_client_site cascade;
 create MATERIALIZED view vr_day_sums_client_site
@@ -128,7 +97,84 @@ select a.*,xmlforest(xmlforest(a.day,a.site,a.duration,
 	a.bytes,a.conn_count) as row) as row
         from vr_day_sums_site a;
 
+/*загрузки по дням,клиентам и ссылкам*/
+drop MATERIALIZED view if exists vr_day_client_url_download cascade;
+create MATERIALIZED view vr_day_client_url_download
+as
+select
+    day,
+    b.address, -- ip
+    a.url,
+    b.name, -- hostname
+	b.description,-- client host description
+	a.duration,
+    a.bytes,
+    a.conn_count
+from
+    (select date_trunc('day',request_date) as day,
+        client_host,
+        url,
+        sum(duration) as duration,
+        sum(bytes) as bytes,
+        count(url) as conn_count-- всего соединений для определенного url
+    from squidevents a,contenttype b
+    where a.content_type=b.id
+    and b.download=true
+    group by day,client_host,url) as a,
+    clienthost b
+    where a.client_host=b.id
+    with no data;
 
+REFRESH MATERIALIZED VIEW vr_day_client_url_download;
 
+-- xml version
+drop view if exists vr_xml_day_client_url_download;
+create or replace view vr_xml_day_client_url_download
+as
+select a.*,
+xmlforest(xmlforest(a.day,a.address,a.name,a.description,
+	    a.url,a.duration,a.bytes,a.conn_count) as row) as row
+        from vr_day_client_url_download a;
 
- 
+/*
+select substring(url from '[^\/]*$'),address,conn_count from vr_day_downloads
+    where day='2015-12-20'::date order by 1
+*/
+
+/*загрузки по дням и клиентам */
+drop MATERIALIZED view if exists vr_day_client_download cascade;
+create MATERIALIZED view vr_day_client_download
+as
+select
+    day,
+    b.address, -- ip
+    b.name, -- hostname
+	b.description,-- client host description
+	a.duration,
+    a.bytes,
+    a.conn_count
+from
+    (select date_trunc('day',request_date) as day,
+        client_host,
+        sum(duration) as duration,
+        sum(bytes) as bytes,
+        count(url) as conn_count-- всего соединений для определенного url
+    from squidevents a,contenttype b
+    where a.content_type=b.id
+    and b.download=true
+    group by day,client_host) as a,
+    clienthost b
+    where a.client_host=b.id
+    with no data;
+
+REFRESH MATERIALIZED VIEW vr_day_client_download;
+
+-- xml version
+drop view if exists vr_xml_day_client_download;
+create or replace view vr_xml_day_client_download
+as
+select a.*,
+xmlforest(xmlforest(a.day,a.address,a.name,a.description,
+	    a.duration,a.bytes,a.conn_count) as row) as row
+        from vr_day_client_download a;
+
