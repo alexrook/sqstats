@@ -98,7 +98,7 @@
     <xsl:template match='column'>
         <div class="row">
             <div class="col-lg-12">
-                <table class="table table-striped" id="reportTable">
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>Сайт</th> 
