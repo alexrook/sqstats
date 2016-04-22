@@ -18,6 +18,7 @@
                 <script src="/js/numeral/153/numeral.min.js"/>
                 <script src="/js/numeral/153/languages.min.js"/>
                 <script src="/js/punycode/140/punycode.min.js"/>
+                <script src="/js/tablesorter/1/jquery.tablesorter.min.js"></script>
                 <script src="../../js/main.js"/>
 
                 <style>
@@ -79,7 +80,7 @@
     <xsl:template match="column">
         <div class="row">
             <div class="col-lg-12">
-                <table class="table table-striped">
+                <table class="table table-striped" id="reportTable">
                     <thead>
                         <tr>
                             <th>Год</th>

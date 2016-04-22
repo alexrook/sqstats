@@ -18,7 +18,7 @@
                 <script src="/js/numeral/153/numeral.min.js"></script>
                 <script src="/js/numeral/153/languages.min.js"></script>
                 <script src="/js/punycode/140/punycode.min.js"></script>
-                <script src="/js/tablesorter/jquery.tablesorter.min.js"></script>
+                <script src="/js/tablesorter/1/jquery.tablesorter.min.js"></script>
                 <script src="../../js/main.js"></script>
 				 
             </head>

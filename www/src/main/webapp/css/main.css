@@ -79,5 +79,18 @@ footer p:last-child{
 }
 
 
+/* tablesorter jquery-plugin support*/
+.th-glyphicon{
+    color: #337ab7;
+    top: 1px;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+}
 
 
+.sortableHeader:hover{
+    cursor:pointer;
+    color: #337ab7;
+    text-decoration: underline;
+}

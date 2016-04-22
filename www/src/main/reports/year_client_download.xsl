@@ -19,6 +19,7 @@
                 <script src="/js/numeral/153/numeral.min.js"></script>
                 <script src="/js/numeral/153/languages.min.js"></script>
                 <script src="/js/punycode/140/punycode.min.js"></script>
+                <script src="/js/tablesorter/1/jquery.tablesorter.min.js"></script>
                 <script src="../../js/main.js"></script>
 
             </head>
@@ -83,7 +84,7 @@
     <xsl:template match='column'>
         <div class="row">
             <div class="col-lg-12">
-                <table class="table table-striped">
+                <table class="table table-striped" id="reportTable">
                     <thead>
                         <tr>
                             <th>Адрес клиента</th>
@@ -118,10 +119,10 @@
 
     <xsl:template match='row'>
         <xsl:variable name="date" select="substring-before(year,'T')"/>
-	<xsl:variable name="dyear" select="substring-before($date,'-')"/>
+        <xsl:variable name="dyear" select="substring-before($date,'-')"/>
         <xsl:variable name="bytes" select='bytes'/>
         <xsl:variable name="address" select='address'/>
-         <xsl:variable name="dnsname">
+        <xsl:variable name="dnsname">
             <xsl:choose>
                 <xsl:when test='name'>
                     <xsl:value-of  select='name'/>

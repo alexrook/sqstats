@@ -18,6 +18,7 @@
                 <script src="/js/numeral/153/numeral.min.js"/>
                 <script src="/js/numeral/153/languages.min.js"/>
                 <script src="/js/punycode/140/punycode.min.js"/>
+                <script src="/js/tablesorter/1/jquery.tablesorter.min.js"></script>
                 <script src="../../js/main.js"/>
 
                 <style>
@@ -25,7 +26,7 @@
                     padding:3px;
                     }
                     .glyphicon {
-                        line-height: inherit;
+                    line-height: inherit;
                     }
                 </style>
 
@@ -79,7 +80,7 @@
     <xsl:template match="column">
         <div class="row">
             <div class="col-lg-12">
-                <table class="table table-striped">
+                <table class="table table-striped" id="reportTable">
                     <thead>
                         <tr>
                             <th>Неделя</th>
@@ -117,7 +118,9 @@
         <tr>
             <td>
                 <ul class="nav nav-pills">
-                    <li><xsl:value-of select="$date"/></li>
+                    <li>
+                        <xsl:value-of select="$date"/>
+                    </li>
                     <li>
                         <a>
                             <xsl:attribute name="title">
@@ -156,7 +159,7 @@
                     </xsl:attribute>
                     <xsl:value-of select="$bytes"/>
                 </a>
-                </td>
+            </td>
             <td class="conn_count">
                 <xsl:value-of select="conn_count"/>
             </td>

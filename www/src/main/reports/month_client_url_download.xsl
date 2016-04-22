@@ -15,10 +15,11 @@
                 <link rel="stylesheet" href="/css/bootstrap/336/css/bootstrap.min.css"/>
                 <link rel="stylesheet" href="../../css/main.css"/>
 				
-				<script src="/js/jquery/214/jquery.min.js"></script>
+                <script src="/js/jquery/214/jquery.min.js"></script>
                 <script src="/js/numeral/153/numeral.min.js"></script>
                 <script src="/js/numeral/153/languages.min.js"></script>
-				<script src="/js/punycode/140/punycode.min.js"></script>
+                <script src="/js/punycode/140/punycode.min.js"></script>
+                <script src="/js/tablesorter/1/jquery.tablesorter.min.js"></script>
                 <script src="../../js/main.js"></script>
 				
             </head>
@@ -97,7 +98,7 @@
     <xsl:template match='column'>
         <div class="row">
             <div class="col-lg-12">
-                <table class="table table-striped">
+                <table class="table table-striped" id="reportTable">
                     <thead>
                         <tr>
                             <th>URL</th> 
@@ -144,7 +145,7 @@
                             select='$url'/>
                     </xsl:attribute>
                     <xsl:value-of select='$url'/>
-				</a>
+                </a>
             </td>
             <td class="duration">            
                 <xsl:value-of select='duration'/>
