@@ -10,6 +10,18 @@ create table squidevents (id bigint not null primary key,
 		    method varchar(115), -- GET, PUT, OPTIONS ...
 		    hier_code varchar(115),
 		    content_type varchar(115));
+
+create table reportsbase
+(
+    id int unique,
+    day timestamp,
+    week timestamp, 
+    month timestamp,
+    year double,
+    site varchar(150),
+    sitegroup varchar(150)
+);
+
 */
 
 drop function if exists f_tai_systemevents() cascade;
@@ -20,6 +32,8 @@ $$
 declare
 parsed_message varchar[];
 req_date timestamp;
+site varchar;
+sitegroup varchar;
 begin
     -- http://wiki.squid-cache.org/Features/LogFormat#Default_Formats
     parsed_message=regexp_split_to_array(trim(NEW.message),E'\\s+');
@@ -63,6 +77,24 @@ begin
 					 parsed_message[9], --hier_code
 					 parsed_message[10]::int --content-type
 						    );
+
+    site=getHostNameFromUrl(parsed_message[7]);
+    sitegroup=getGroupHostNameFromSite(site);
+
+    insert into reportsbase(id,
+			     day,	
+			     week, 
+			     month,	
+			     year,
+			     site,
+			     sitegroup) values (NEW.id,
+			    date_trunc('day',request_date),
+			    date_trunc('week',request_date), 
+			    date_trunc('month',request_date),
+			    date_part('year',request_date),
+			    site,
+			    sitegroup);
+
     return NEW;
 end;
 $$

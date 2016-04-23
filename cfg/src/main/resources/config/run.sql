@@ -1,6 +1,7 @@
 \i aux-host-method-result.sql
 \i contenttype.sql
 \i squidevents.sql
+\i reports-base.sql
 \i systemevents_trigger.sql
 --\i reports.sql
 

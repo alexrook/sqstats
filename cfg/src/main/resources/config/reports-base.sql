@@ -31,19 +31,68 @@ end;
 $$ 
 language plpgsql;
 
-drop materialized view if exists vr_reports_base cascade;
-create materialized view vr_reports_base
-as
-select id,
-date_trunc('day',request_date) as day,
-date_trunc('week',request_date) as week, 
-date_trunc('month',request_date) as month,
-date_part('year',request_date) as year,
-gethostnamefromurl(url) as url 
-from squidevents
-with no data;
+drop table if exists sitegroup cascade;
+create table sitegroup 
+(id int primary key,
+ regex varchar(33) unique,
+ name varchar(150) unique,
+ description varchar(350)
+);
 
-refresh materialized view vr_reports_base;
+insert into sitegroup (id,regex,name) values(1,'.*windows.*\.(com|net)','windows');
+insert into sitegroup (id,regex,name) values(2,'.*creativecdn\.com','creativecdn.com');
+insert into sitegroup (id,regex,name) values(3,'.*cmle\.ru','cmle.ru');
+insert into sitegroup (id,regex,name) values(4,'.*mixmarket\.biz','mixmarket.biz');
+insert into sitegroup (id,regex,name) values(5,'.*yandex\.(net|ru)','yandex.ru');
+insert into sitegroup (id,regex,name) values(6,'.*tumblr\.com','tumblr.com');
+insert into sitegroup (id,regex,name) values(7,'.*doubleclick\.net','doubleclick.net');
+insert into sitegroup (id,regex,name) values(8,'.*cdnvideo\.ru','cdnvideo.ru');
+insert into sitegroup (id,regex,name) values(9,'.*(google|gstatic).*\.(com|ru|ua)','google.com');
+insert into sitegroup (id,regex,name) values(10,'.*gismeteo\.ru','gismeteo.ru');
+insert into sitegroup (id,regex,name) values(11,'.*cloudfront\.net','cloudfront.net');
+insert into sitegroup (id,regex,name) values(12,'.*microsoft\.com','microsoft.com');
+insert into sitegroup (id,regex,name) values(13,'.*marketgid\.com','marketgid.com');
+insert into sitegroup (id,regex,name) values(14,'.*mail\.ru','mail.ru');
+insert into sitegroup (id,regex,name) values(15,'.*utorrent.com','utorrent.com');
+insert into sitegroup (id,regex,name) values(16,'.*eset\.com','eset.com');
+insert into sitegroup (id,regex,name) values(17,'.*olx\.com','olx.com');
+insert into sitegroup (id,regex,name) values(18,'.*betweendigital\.com','betweendigital.com');
+
+drop function if exists getGroupHostNameFromSite(varchar) cascade;
+create or replace function getGroupHostNameFromSite(site varchar) 
+returns varchar 
+as
+$$
+declare 
+    result varchar;
+begin
+    
+    select name from sitegroup into result
+        where site ~ regex fetch first row only;
+
+    if char_length(result)>0  then
+	return trim(result);
+    end if;
+
+    return site;    
+end;
+$$ 
+language plpgsql;
+
+
+
+drop table if exists reportsbase cascade;
+create table reportsbase
+(
+    id int unique,
+    day timestamp,
+    week timestamp, 
+    month timestamp,
+    year double precision,
+    site varchar(150),
+    sitegroup varchar(150)
+);
+
 
 
 
