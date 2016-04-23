@@ -29,15 +29,17 @@ create table squidevents (id bigint not null primary key,
 			     month,	
 			     year,
 			     site,
-			     sitegroup) select
+			     sitegroup) (select
 					    id,
 					    date_trunc('day',request_date),
 					    date_trunc('week',request_date),
 					    date_trunc('month',request_date),
 					    date_part('year',request_date),
 					    getHostNameFromUrl(url),
-					    getGroupHostFromSite(getHostNameFromUrl(url))
+					    getGroupHostNameFromSite(getHostNameFromUrl(url))
 					    from squidevents
-					    where id<(select min(id) from reportsbase);
+					    where id<(select min(id) from reportsbase)
+					    order by id desc
+					    fetch first 777000 rows only);
 
 
