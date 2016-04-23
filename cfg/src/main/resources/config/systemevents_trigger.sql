@@ -88,10 +88,10 @@ begin
 			     year,
 			     site,
 			     sitegroup) values (NEW.id,
-			    date_trunc('day',request_date),
-			    date_trunc('week',request_date), 
-			    date_trunc('month',request_date),
-			    date_part('year',request_date),
+			    date_trunc('day',req_date),
+			    date_trunc('week',req_date), 
+			    date_trunc('month',req_date),
+			    date_part('year',req_date),
 			    site,
 			    sitegroup);
 
