@@ -5,19 +5,25 @@
 
 /*итоги за день */
 drop MATERIALIZED view if exists vr_day_sums cascade;
-create MATERIALIZED view vr_day_sums
+create materialized view vr_day_sums 
 as
-select date_trunc('day',request_date) as day,/* дата */
-	sum(duration) as duration,/* общее время соединений */
-        sum(bytes) as bytes, /* общая сумма байтов */
-	count(client_host) as conn_count /*всего соединений за один день*/
-    from squidevents group by day;
+select b.day,
+    sum(a.duration) as duration,
+    sum(a.bytes) as bytes,
+    count(a.client_host) as conn_count
+    from squidevents a, reportsbase b
+    where a.id=b.id
+    group by b.day
+    with no data;
+
+refresh MATERIALIZED view vr_day_sums;
 
 ---xml version 
 drop view if exists vr_xml_day_sums ;
 create or replace view vr_xml_day_sums
 as
-select a.*,xmlforest(xmlforest(a.day,a.duration,a.bytes,a.conn_count) as row) as row from vr_day_sums a;
+select a.*,xmlforest(xmlforest(a.day,a.duration,a.bytes,a.conn_count) as row) as row 
+from vr_day_sums a;
 
 /*итоги за день по клиентам*/
 drop MATERIALIZED view if exists vr_day_sums_client cascade;
