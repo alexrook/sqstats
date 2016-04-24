@@ -2,18 +2,16 @@
  *  report  views
  */
 
-
 /*итоги за день */
 drop MATERIALIZED view if exists vr_day_sums cascade;
 create materialized view vr_day_sums 
 as
-select b.day,
+select a.day,
     sum(a.duration) as duration,
     sum(a.bytes) as bytes,
-    count(a.client_host) as conn_count
-    from squidevents a, reportsbase b
-    where a.id=b.id
-    group by b.day
+    count(a.client_host) as conn_count -- число соединений
+    from  vr_reportsbase a
+    group by a.day
     with no data;
 
 refresh MATERIALIZED view vr_day_sums;
@@ -35,12 +33,12 @@ select day,
 	b.description,-- client host description
 	duration,bytes,conn_count
 from
-(select  date_trunc('day',request_date) as day,/* дата */
+(select day,/* дата */
 	client_host,
 	sum(duration) as duration,/* общее время соединения  за день для клиента */
-        sum(bytes) as bytes, /* сумма байтов для клиента */
+    sum(bytes) as bytes, /* сумма байтов для клиента */
 	count(client_host) as conn_count /*всего соединений за день для определенного клиента*/
-    from squidevents
+    from vr_reportsbase
     group by day,client_host) as a,
     clienthost b
     where a.client_host=b.id;
@@ -64,13 +62,14 @@ select day,
 	site,
 	duration,bytes,conn_count
 from
-(select date_trunc('day',request_date) as day,/* дата */
+(select day,/* дата */
 	client_host,/* клиент */
-	gethostnamefromurl(url) as site, -- сайт
+	sitegroup as site, -- сайт
 	sum(duration) as duration,/* общее время соединения  за день для клиента по сайтам*/
-        sum(bytes) as bytes, /* сумма байтов для клиента по сайтам*/
+    sum(bytes) as bytes, /* сумма байтов для клиента по сайтам*/
 	count(client_host) as conn_count /*всего соединений за день для определенного клиента и сайта*/
-    from squidevents group by day,client_host,site) as a,
+    from vr_reportsbase
+    group by day,client_host,sitegroup) as a,
     clienthost b
     where b.id=a.client_host;
 
@@ -88,12 +87,13 @@ xmlforest(xmlforest(a.day,a.address,a.name,a.description,
 drop MATERIALIZED view if exists vr_day_sums_site cascade;
 create MATERIALIZED view vr_day_sums_site
 as
-select  date_trunc('day',request_date) as day,/* дата */
-	gethostnamefromurl(url) as site, -- сайт
+select day,/* дата */
+	sitegroup as site, -- сайт
 	sum(duration) as duration,/* общее время соединений  за день*/
-        sum(bytes) as bytes, /* сумма байтов*/
+    sum(bytes) as bytes, /* сумма байтов*/
 	count(client_host) as conn_count /*всего соединений за день для определенного сайта*/
-    from squidevents group by day,site;
+    from vr_reportsbase
+    group by day,sitegroup;
 
 ---xml version
 drop view if exists vr_xml_day_sums_site;
@@ -117,13 +117,13 @@ select
     a.bytes,
     a.conn_count
 from
-    (select date_trunc('day',request_date) as day,
+    (select day,
         client_host,
         url,
         sum(duration) as duration,
         sum(bytes) as bytes,
         count(url) as conn_count-- всего соединений для определенного url
-    from squidevents a,contenttype b
+    from vr_reportsbase a,contenttype b
     where a.content_type=b.id
     and b.download=true
     group by day,client_host,url) as a,
@@ -160,12 +160,12 @@ select
     a.bytes,
     a.conn_count
 from
-    (select date_trunc('day',request_date) as day,
+    (select day,
         client_host,
         sum(duration) as duration,
         sum(bytes) as bytes,
         count(url) as conn_count-- всего соединений для определенного url
-    from squidevents a,contenttype b
+    from vr_reportsbase a,contenttype b
     where a.content_type=b.id
     and b.download=true
     group by day,client_host) as a,
