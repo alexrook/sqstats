@@ -115,7 +115,7 @@ from
         client_host,
         sum(duration) as duration,
         sum(bytes) as bytes,
-        count(url) as conn_count-- всего соединений для определенного url
+        count(url) as conn_count-- всего соединений
     from vr_reportsbase a,contenttype b
     where a.content_type=b.id
     and b.download=true
