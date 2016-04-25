@@ -118,7 +118,6 @@
     </xsl:template>
 	
     <xsl:template match='row'>
-        <xsl:variable name="date" select="substring-before(year,'T')"/>
         <xsl:variable name="address" select='address'/>
         <xsl:variable name="bytes" select='bytes'/>
         <xsl:variable name="dnsname">

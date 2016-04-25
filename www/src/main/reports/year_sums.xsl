@@ -113,20 +113,20 @@
         </div>
     </xsl:template>
     <xsl:template match="row">
-        <xsl:variable name="date" select="substring-before(year,'T')"/>
-	<xsl:variable name="dyear" select="dyear"/>
+       
+	<xsl:variable name="vyear" select="year"/>
         <xsl:variable name="bytes" select="bytes"/>
         <tr>
             <td>
                 <ul class="nav nav-pills">
-                    <li><xsl:value-of select="$dyear"/></li>
+                    <li><xsl:value-of select="$vyear"/></li>
                     <li>
                         <a>
                             <xsl:attribute name="title">
-                                <xsl:value-of select="concat('итоги за ',$dyear,' год по пользователям')"/>
+                                <xsl:value-of select="concat('итоги за ',$vyear,' год по пользователям')"/>
                             </xsl:attribute>
                             <xsl:attribute name="href">
-                                <xsl:value-of select="concat('year_sums_client?year=',$date)"/>
+                                <xsl:value-of select="concat('year_sums_client?year=',$vyear)"/>
                             </xsl:attribute>
                             <span class="glyphicon glyphicon-user"></span>
                         </a>
@@ -134,10 +134,10 @@
                     <li>
                         <a>
                             <xsl:attribute name="title">
-                                <xsl:value-of select="concat('загрузки за ',$dyear,' год')"/>
+                                <xsl:value-of select="concat('загрузки за ',$vyear,' год')"/>
                             </xsl:attribute>
                             <xsl:attribute name="href">
-                                <xsl:value-of select="concat('year_client_download?year=',$date)"/>
+                                <xsl:value-of select="concat('year_client_download?year=',$vyear)"/>
                             </xsl:attribute>
                             <span class="glyphicon glyphicon-cloud-download"></span>
                         </a>
@@ -150,7 +150,7 @@
             </td>
             <td class="bytes">
                 <xsl:attribute name="title">
-                        <xsl:value-of select="concat('итого за ',$dyear, ' год по сайтам')"/>
+                        <xsl:value-of select="concat('итого за ',$vyear, ' год по сайтам')"/>
                 </xsl:attribute>
                 <xsl:value-of select="$bytes"/>
             </td>
