@@ -2,17 +2,18 @@
 drop MATERIALIZED view if exists vr_month_sums cascade;
 create MATERIALIZED view vr_month_sums
 as
-select date_trunc('month',request_date) as month,/* месяц */
+select month,/* месяц */
 	sum(duration) as duration,/* общее время соединений */
         sum(bytes) as bytes, /* общая сумма байтов */
 	count(client_host) as conn_count /*всего соединений за один месяц*/
-    from squidevents group by month;
+    from vr_reportsbase group by month;
 
 ---xml version 
 drop view if exists vr_xml_month_sums;
 create or replace view vr_xml_month_sums
 as
-select a.*,xmlforest(xmlforest(a.month,a.duration,a.bytes,a.conn_count) as row) as row from vr_month_sums a;
+select a.*,xmlforest(xmlforest(a.month,a.duration,a.bytes,a.conn_count) as row) as row
+from vr_month_sums a;
 
 /*итоги за месяц по клиентам*/
 drop MATERIALIZED view if exists vr_month_sums_client cascade;
@@ -24,12 +25,12 @@ select  month,
 	b.description,-- client host description
 	duration,bytes,conn_count
 from
-(select  date_trunc('month',request_date) as month,/* месяц */
+(select  month,/* месяц */
 	client_host,
 	sum(duration) as duration,/* общее время соединения  за месяц для клиента */
         sum(bytes) as bytes, /* сумма байтов для клиента */
 	count(client_host) as conn_count /*всего соединений за месяц для определенного клиента*/
-    from squidevents
+    from vr_reportsbase
     group by month,client_host) as a,
     clienthost b
     where a.client_host=b.id;
@@ -54,13 +55,13 @@ select  month,
 	site,
 	duration,bytes,conn_count
 from
-(select date_trunc('month',request_date) as month,/* дата */
+(select month,/* дата */
 	client_host,/* клиент */
-	gethostnamefromurl(url) as site, -- сайт
+	sitegroup site, -- сайт
 	sum(duration) as duration,/* общее время соединения  за месяц для клиента по сайтам*/
         sum(bytes) as bytes, /* сумма байтов для клиента по сайтам*/
 	count(client_host) as conn_count /*всего соединений за месяц для определенного клиента и сайта*/
-    from squidevents group by month,client_host,site) as a,
+    from vr_reportsbase group by month,client_host,sitegroup) as a,
     clienthost b
     where b.id=a.client_host;
 
@@ -78,12 +79,12 @@ xmlforest(xmlforest(a.month,a.address,a.name,a.description,
 drop MATERIALIZED view if exists vr_month_sums_site cascade;
 create MATERIALIZED view vr_month_sums_site
 as
-select  date_trunc('month',request_date) as month,/* дата */
-	gethostnamefromurl(url) as site, -- сайт
+select  month,/* дата */
+	sitegroup site, -- сайт
 	sum(duration) as duration,/* общее время соединений за месяц*/
         sum(bytes) as bytes, /* сумма байтов*/
 	count(client_host) as conn_count /*количество соединений за месяц для определенного сайта*/
-    from squidevents group by month,site;
+    from vr_reportsbase group by month,sitegroup;
 
 ---xml version
 drop view if exists vr_xml_month_sums_site;
@@ -109,12 +110,12 @@ select
     a.bytes,
     a.conn_count
 from
-    (select date_trunc('month',request_date) as month,
+    (select month,
         client_host,
         sum(duration) as duration,
         sum(bytes) as bytes,
-        count(url) as conn_count-- всего соединений для определенного url
-    from squidevents a,contenttype b
+        count(url) as conn_count-- всего соединений
+    from vr_reportsbase a,contenttype b
     where a.content_type=b.id
     and b.download=true
     group by month,client_host) as a,
@@ -147,13 +148,13 @@ select
     a.bytes,
     a.conn_count
 from
-    (select date_trunc('month',request_date) as month,
+    (select month,
         client_host,
         url,
         sum(duration) as duration,
         sum(bytes) as bytes,
-        count(url) as conn_count-- всего соединений для определенного url
-    from squidevents a,contenttype b
+        count(url) as conn_count-- всего соединений
+    from vr_reportsbase a,contenttype b
     where a.content_type=b.id
     and b.download=true
     group by month,client_host,url) as a,
