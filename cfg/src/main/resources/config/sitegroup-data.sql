@@ -1,26 +1,19 @@
 delete from sitegroup;
 
-insert into sitegroup (id,regex,name) values(1,'.*windows.*\.(com|net)','windows');
-insert into sitegroup (id,regex,name) values(2,'.*creativecdn\.com','creativecdn.com');
-insert into sitegroup (id,regex,name) values(3,'.*cmle\.ru','cmle.ru');
-insert into sitegroup (id,regex,name) values(4,'.*mixmarket\.biz','mixmarket.biz');
-insert into sitegroup (id,regex,name) values(5,'.*yandex\.(net|ru)','yandex.ru');
-insert into sitegroup (id,regex,name) values(6,'.*tumblr\.com','tumblr.com');
-insert into sitegroup (id,regex,name) values(7,'.*doubleclick\.net','doubleclick.net');
-insert into sitegroup (id,regex,name) values(8,'.*cdnvideo\.ru','cdnvideo.ru');
-insert into sitegroup (id,regex,name) values(9,'.*(google|gstatic).*\.(com|ru|ua)','google.com');
-insert into sitegroup (id,regex,name) values(10,'.*gismeteo\.ru','gismeteo.ru');
-insert into sitegroup (id,regex,name) values(11,'.*cloudfront\.net','cloudfront.net');
-insert into sitegroup (id,regex,name) values(12,'.*microsoft\.com','microsoft.com');
-insert into sitegroup (id,regex,name) values(13,'.*marketgid\.com','marketgid.com');
-insert into sitegroup (id,regex,name) values(14,'.*mail\.ru','mail.ru');
-insert into sitegroup (id,regex,name) values(15,'.*utorrent.com','utorrent.com');
-insert into sitegroup (id,regex,name) values(16,'.*eset\.com','eset.com');
-insert into sitegroup (id,regex,name) values(17,'.*olx\.com','olx.com');
-insert into sitegroup (id,regex,name) values(18,'.*betweendigital\.com','betweendigital.com');
-insert into sitegroup (id,regex,name) values(19,'.*online\.ua','online.ua');
-insert into sitegroup (id,regex,name) values(20,'.*adriver\.ru','adriver.ru');
-insert into sitegroup (id,regex,name) values(21,'.*vk\.com','vk.com');
-insert into sitegroup (id,regex,name) values(22,'.*smi2\.net','smi2.net');
-insert into sitegroup (id,regex,name) values(23,'.*rambler\.ru','rambler.ru');
-insert into sitegroup (id,regex,name) values(24,'.*yadro\.ru','yadro.ru');
+insert into sitegroup (id,regex,name) values(1,'.*windows.*\.(com|net)','windows.com');
+insert into sitegroup (id,regex,name) values(2,'.*yandex\.(net|ru)','yandex.ru');
+insert into sitegroup (id,regex,name) values(3,'.*(google|gstatic).*\.(com|ru|ua)','google.com');
+
+
+-- substr values
+insert into sitegroup (id,regex,substr,description)
+                values(99997,'.*narod\.ru',true
+                'calculate separate narod sites');
+insert into sitegroup (id,regex,substr,description)
+                values(99998,'.*livejournal\.com',true
+                'calculate separate LJ sites');
+insert into sitegroup (id,regex,substr,description)
+                values(99999,'[^.]*\.[^.]*$',true
+                'return 2-level domain for default, i.e "some.aaa.com" ->"aaa.com"');
+                
+                

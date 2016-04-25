@@ -36,6 +36,7 @@ create table sitegroup
 (id int primary key,
  regex varchar(33) unique,
  name varchar(150) unique,
+ substr boolean default false,
  description varchar(350)
 );
 
@@ -82,5 +83,35 @@ from
 squidevents a, reportsbase b
 where a.id=b.id;
 
+create or replace function getGroupHostNameFromSiteEx(site varchar) 
+returns varchar 
+as
+$$
+declare 
+    result varchar;
+begin
+    
+    select name from test_sitegroupp into result
+        where subst=false and
+        site ~ regex
+    fetch first row only;
 
+    if char_length(result)>0  then
+        return trim(result);
+    else
+        select substring(site from regex) from test_sitegroupp into result
+        where subst=true and
+        substring(site from regex) is not null
+        order by id asc
+        fetch first row only;
+    end if;
+
+    if char_length(result)>0  then
+        return trim(result);
+    end if;
+        
+    return site;    
+end;
+$$ 
+language plpgsql;
 
