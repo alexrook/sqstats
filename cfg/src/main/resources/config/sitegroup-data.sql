@@ -10,13 +10,11 @@ insert into sitegroup (id,regex,substr,description)
                 values(99996,'.*xn----itbjhccqit6f\.xn--p1ai',true,
                 'calculate separate щелкино-рк.рф sites');
 insert into sitegroup (id,regex,substr,description)
-                values(99997,'.*narod\.ru',true
+                values(99997,'.*narod\.ru',true,
                 'calculate separate narod sites');
 insert into sitegroup (id,regex,substr,description)
-                values(99998,'.*livejournal\.com',true
+                values(99998,'.*livejournal\.com',true,
                 'calculate separate LJ sites');
 insert into sitegroup (id,regex,substr,description)
-                values(99999,'[^.]*\.[^.]*$',true
-                'return 2-level domain for default, i.e "some.aaa.com" ->"aaa.com"');
-                
-                
+                values(99999,'[^.]*\.[^.]*$',true,
+                'return 2-level domain for default, i.e some.aaa.com ->aaa.com');
