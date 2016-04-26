@@ -7,6 +7,9 @@ insert into sitegroup (id,regex,name) values(3,'.*(google|gstatic).*\.(com|ru|ua
 
 -- substr values
 insert into sitegroup (id,regex,substr,description)
+                values(99996,'.*xn----itbjhccqit6f\.xn--p1ai',true,
+                'calculate separate щелкино-рк.рф sites');
+insert into sitegroup (id,regex,substr,description)
                 values(99997,'.*narod\.ru',true
                 'calculate separate narod sites');
 insert into sitegroup (id,regex,substr,description)
