@@ -55,6 +55,13 @@ create table sitegroup
  description varchar(350)
 );
 
+drop view if exists vr_xml_sitegroup cascade;
+create or replace view vr_xml_sitegroup as
+select  a.*,
+        xmlforest(xmlforest(a.id,a.regex,a.substr,a.name,a.description) as row) as row
+        from sitegroup a order by a.id asc;
+        
+        
 drop function if exists getGroupHostNameFromSite(varchar) cascade;
 create or replace function getGroupHostNameFromSite(site varchar) 
 returns varchar 
