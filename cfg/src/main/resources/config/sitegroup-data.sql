@@ -1,7 +1,7 @@
 delete from sitegroup;
 
 insert into sitegroup (id,regex,name) values(1,'.*windows.*\.(com|net)','windows.com');
-insert into sitegroup (id,regex,name) values(2,'.*yandex\.(net|ru)','yandex.ru');
+insert into sitegroup (id,regex,name) values(2,'.*(yandex|yadro)\.(net|ru)','yandex.ru');
 insert into sitegroup (id,regex,name) values(3,'.*(google|gstatic).*\.(com|ru|ua)','google.com');
 
 
