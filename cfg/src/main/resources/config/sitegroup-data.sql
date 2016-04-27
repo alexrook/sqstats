@@ -8,13 +8,13 @@ insert into sitegroup (id,regex,name) values(3,'.*(google|gstatic).*\.(com|ru|ua
 -- substr values
 insert into sitegroup (id,regex,substr,description)
                 values(99996,'.*xn----itbjhccqit6f\.xn--p1ai',true,
-                'calculate separate щелкино-рк.рф sites');
+                'считать отдельно итоги для сайтов домена щелкино-рк.рф');
 insert into sitegroup (id,regex,substr,description)
                 values(99997,'.*narod\.ru',true,
-                'calculate separate narod sites');
+                'считать отдельно итоги для сайтов narod.ru');
 insert into sitegroup (id,regex,substr,description)
                 values(99998,'.*livejournal\.com',true,
-                'calculate separate LJ sites');
+                'считать отдельно итоги для ЖЖ страниц');
 insert into sitegroup (id,regex,substr,description)
                 values(99999,'[^.]*\.[^.]*$',true,
                 'return 2-level domain for default, i.e some.aaa.com ->aaa.com');
