@@ -28,21 +28,28 @@
     </xsl:template>
     
     <xsl:template match='row'>
+        <xsl:variable name="vsubstr">
+            <xsl:if test="substr='true'">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            </xsl:if>
+        </xsl:variable>
         <tr> 
             <td class="col-md-1">
                 <xsl:value-of select='id'/>
             </td> 
             <td class="col-md-3">
-                <xsl:value-of select='regex'/>
+                <code>
+                    <xsl:value-of select='regex'/>
+                </code>
             </td> 
             <td class="col-md-2">
-                <xsl:apply-templates select='name'/>
+                <xsl:value-of select='name'/>
             </td> 
             <td class="col-md-1">
-                <xsl:apply-templates select='substr'/>
+                <xsl:copy-of select='$vsubstr'/>
             </td> 
             <td class="col-md-3">
-                <xsl:apply-templates select='description'/>
+                <xsl:value-of select='description'/>
             </td> 
         </tr>
     </xsl:template>
