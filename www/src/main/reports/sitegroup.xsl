@@ -15,10 +15,10 @@
             <thead> 
                 <tr> 
                     <th>#</th> 
-                    <th>Regular expression</th> 
-                    <th>Group name</th> 
-                    <th>substr?</th> 
-                    <th>description</th> 
+                    <th>Регулярное выражение</th> 
+                    <th>Имя группы</th> 
+                    <th>substring?</th> 
+                    <th>Описание</th> 
                 </tr> 
             </thead> 
             <tbody> 

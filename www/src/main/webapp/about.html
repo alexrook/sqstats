@@ -29,23 +29,63 @@
                 <h1>Статистика Squid</h1>
             </div>
             <p class="lead">Создано VKEK IT Department под влиянием утилиты 
-		<a href="http://sourceforge.net/projects/sarg/">Sarg</a>,
+                <a href="http://sourceforge.net/projects/sarg/">Sarg</a>,
                 исходный код доступен на <a href="https://github.com/alexrook/sqstats">GitHub</a>
-		</p>
+            </p>
             <ul>
                 <li>Данные загружаются с двух экземпляров 
                     <a href="http://www.squid-cache.org/">Squid</a>
                     в PostgreSQL в соответствии с 
                     <a href="http://wiki.squid-cache.org/Features/LogFormat#Default_Formats">Squid default log format</a></li>
-                <li>Расчет итогов производится ежесуточно, еженедельно, ежемесячно
-		     по /etc/cron.(daily,weekly,monthly), 
-                    поэтому итоги для текущих суток, недели, месяца не репрезентативны.
-		    Итоги за год вычисляются ежемесячно, 
-		    поэтому верны для прошлых лет,
-		    а для текущего года - как накопительные на начало текущего месяца.</li>
-                <li>Суммы байт учитывают, в том числе, обмен траффиком между Squid и клиентом</li>
-		<li>Загрузки считаются для Content-Type's отмеченных как download.
-		    See maintenance->download content-types or contenttype relation.</li>
+                <li>
+                    <figure>
+                        <figcaption>Расчет итогов</figcaption>
+                        <ul>
+                            <li>Производится ежесуточно, еженедельно, ежемесячно
+                                по /etc/cron.(daily,weekly,monthly), 
+                                поэтому итоги для <cite>текущих</cite> суток, недели, месяца не репрезентативны.</li>
+                            <li>
+                                Итоги за год вычисляются ежемесячно, 
+                                поэтому верны для прошлых лет,
+                                а для <cite>текущего</cite> года - как накопительные на начало <cite>текущего месяца.</cite>   
+                            </li>
+                            <li>Загрузки считаются для Content-Type's отмеченных как download.
+                                See 
+                                <a href="maintenance.html">Maintenance Download Content-Types</a> or contenttype relation.</li>
+                            <li>Суммы байт учитывают, в том числе, обмен траффиком между Squid и клиентом</li>
+                        </ul>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <figcaption>Для группировки сайтов</figcaption>
+                        <ul>
+                            <li>Просматриватеся таблица регулярных выражений
+                                <code>sitegroup</code> в следующем порядке
+                                <ol>
+                                    <li>Группируются все сайты по имени  используя регулярное выражение. К примеру
+                                        windows, windowsupdate, microsoft
+                                        группируются как microsoft.com</li>
+                                    <li>При отсутствии группировки по имени,
+                                        сайты группируются по результату функции <code>substring(site from regex)</code>
+                                    </li>
+                                    <li>Если никакая группировка не сработала возвращается имя сайта как есть</li>
+                                </ol>
+                            </li>
+                            <li>Для больших подробностей смотрите
+                                <a href="maintenance.html">Maintenance -> Группы сайтов</a>,
+                                исходный код 
+                                <code>sitegroup.sql</code>,
+                                <code>sitegroup-data.sql</code>
+                            </li>
+                        </ul>
+                    </figure>
+                </li>
+                <li>
+                    Ошибки, возникающие при работе программы, можно просмотреть в 
+                    <a href="maintenance.html">Maintenance -> Список ошибок</a>
+                </li>
+
             </ul>
         </div>
 
