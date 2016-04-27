@@ -1,0 +1,8 @@
+report.name=sitegroup
+report.sql=select * from vr_xml_sitegroup
+report.desc=Site Groups
+report.xslt.uri=sitegroup.xsl
+report.xslt.contentType=text/html; charset=utf-8
+
+
+
