@@ -16,5 +16,5 @@ insert into sitegroup (id,regex,substr,description)
                 values(99998,'.*livejournal\.com',true,
                 'считать отдельные итоги для ЖЖ-страниц');
 insert into sitegroup (id,regex,substr,description)
-                values(99999,'[^.]*\.[^.]*$',true,
+                values(99999,'[^.0-9]*\.[^.0-9]+$',true,
                 'return 2-level domain for default, i.e some.aaa.com ->aaa.com');
