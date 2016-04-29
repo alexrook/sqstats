@@ -71,7 +71,7 @@
                             <a href="../../about.html">About</a>
                         </li>
                     </ul>
-                    <p>2015 VKEK IT Dept</p>
+                    <p>2016 VKEK IT Dept</p>
                 </footer>
             </body>
         </html>
