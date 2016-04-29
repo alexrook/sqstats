@@ -49,7 +49,7 @@ language plpgsql;
 drop table if exists sitegroup cascade;
 create table sitegroup 
 (id int primary key,
- regex varchar(33) unique,
+ regex varchar(150) unique,
  name varchar(150) unique,
  substr boolean default false,
  description varchar(350)
