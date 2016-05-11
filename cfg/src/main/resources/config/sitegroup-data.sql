@@ -7,6 +7,9 @@ insert into sitegroup (id,regex,name) values(3,'.*(google|gstatic).*\.(com|ru|ua
 
 -- substr values
 insert into sitegroup (id,regex,substr,description)
+                values(99994,'[^.]*\.[^.]*\.ua$',true,
+                'считать отдельно итоги для  доменов 3 уровня *.ua');
+insert into sitegroup (id,regex,substr,description)
                 values(99995,'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}',true,
                 'считать отдельно ipv4-addresses');
 insert into sitegroup (id,regex,substr,description)
