@@ -17,6 +17,9 @@
             .ooops-code {
                 color:red;
             }
+            .row {
+                margin-bottom: 20px;
+            }
         </style>
     </head>
     <body>
@@ -30,8 +33,6 @@
                     </small>
                 </h1>
             </div>
-            <xsl:apply-templates select='report/resultset/column'/>
-
             <div class="row">
                 <div class="col-md-12">
                     <textarea class="form-control" readonly="true">
@@ -41,10 +42,12 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    Вы можете вернутся на
-                    <a href="${pageContext.servletContext.contextPath}/">главную старницу</a> 
-                    и попробовать продолжить работу с приложением,
-                    если ошибка повторяется - сообщите администратору
+                    <p>
+                        Вы можете вернутся на
+                        <a href="${pageContext.servletContext.contextPath}/">главную старницу</a> 
+                        и попробовать продолжить работу с приложением,
+                        если ошибка повторяется - сообщите администратору
+                    </p>
                 </div>
             </div>
         </div>
