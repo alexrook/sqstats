@@ -152,3 +152,48 @@ begin
 end;
 $$ language plpgsql;
 
+
+-- weird requests
+drop table if exists weirdData cascade;
+create table weirdData (
+     id serial not null primary key,
+     hash varchar(32) unique,
+     request_Date timestamp,
+     from_Squid varchar(15),
+     request varchar(3000),
+     request_count int
+);
+
+drop function if exists  addWeirdData(SystemEvents);
+create or replace function addWeirdData(systemEvent SystemEvents)
+returns int
+as
+$$
+declare 
+    result int;  
+    msgMd5 varchar=null;
+begin
+    select md5(systemEvent.message||systemEvent.fromHost) into msgMd5;
+    select id from weirdData into result where hash=msgMd5;
+    if result is null 
+        then
+            select  nextval('weirddata_id_seq') into result; 
+            insert into weirdData 
+                values(result,
+                       msgMd5,
+                       now(),
+                       systemEvent.fromHost,
+                       substring(systemEvent.message for 2999),
+                       1);
+         else
+            update weirdData 
+                set request_Date=now(),
+                request_count=request_count+1
+            where id=result;
+    end if;
+    
+    return result;
+end;
+$$ language plpgsql;
+
+

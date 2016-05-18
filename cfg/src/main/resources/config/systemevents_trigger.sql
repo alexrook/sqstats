@@ -29,26 +29,16 @@ create or replace function f_tai_systemevents()
     returns trigger
 AS
 $$
-declare
+DECLARE
 parsed_message varchar[];
 req_date timestamp;
 site varchar;
 sitegroup varchar;
-begin
+BEGIN
+	
     -- http://wiki.squid-cache.org/Features/LogFormat#Default_Formats
     parsed_message=regexp_split_to_array(trim(NEW.message),E'\\s+');
     req_date=to_timestamp(((regexp_split_to_array(trim(parsed_message[1]),E'\\.'))[1])::double precision); --timestamp without millsec
-
-    /*
-			        	 parsed_message[2]::bigint, --duration
-					 parsed_message[3], --host
-					 parsed_message[7], --url
-					 parsed_message[4], --http_result
-					 parsed_message[5]::bigint, --bytes
-					 parsed_message[6], --method
-					 parsed_message[9], --hier_code
-					 parsed_message[10] --content-type
-    */
 
      parsed_message[3]=popClientHost(parsed_message[3]);
      parsed_message[4]=popHttpResult(parsed_message[4]);
@@ -95,8 +85,14 @@ begin
 			    site,
 			    sitegroup);
 
-    return NEW;
-end;
+return NEW;
+
+EXCEPTION
+		WHEN OTHERS then
+			RAISE NOTICE 'some weird data';
+			addWeirdData(NEW); 
+	   return NEW;
+END;
 $$
 language plpgsql;
 
