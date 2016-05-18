@@ -90,7 +90,7 @@ return NEW;
 EXCEPTION
 		WHEN OTHERS then
 			RAISE NOTICE 'some weird data';
-			addWeirdData(NEW); 
+			select addWeirdData(NEW); 
 	   return NEW;
 END;
 $$
