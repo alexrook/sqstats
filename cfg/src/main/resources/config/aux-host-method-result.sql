@@ -164,6 +164,17 @@ create table weirdData (
      request_count int
 );
 
+drop view if exist vr_xml_weirdData;
+create or replace view vr_xml_weirdData
+as
+ select a.*,
+        xmlforest(xmlforest(a.id,a.hash,a.request_Date,a.from_Squid,
+        substring(a.request for 155) as request,
+        (length(a.request)>155) as hasMoreReqData,
+        a.request_count as count)  as row) as row
+ from weirdData a order by a.request_Date desc;
+
+     
 drop function if exists  addWeirdData(SystemEvents);
 create or replace function addWeirdData(systemEvent SystemEvents)
 returns int
