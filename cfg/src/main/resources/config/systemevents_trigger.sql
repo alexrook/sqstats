@@ -88,9 +88,9 @@ BEGIN
 return NEW;
 
 EXCEPTION
-		WHEN OTHERS then
+	   WHEN OTHERS then
 			RAISE NOTICE 'some weird data';
-			select addWeirdData(NEW); 
+			perform addWeirdData(NEW); 
 	   return NEW;
 END;
 $$
