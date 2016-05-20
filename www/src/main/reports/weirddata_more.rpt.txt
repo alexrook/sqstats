@@ -1,0 +1,10 @@
+report.name=weirddata_more
+report.sql=select xmlforest(xmlforest(request) as row) as row from weirddata where id=?
+report.param.id.index=1
+report.param.id.sqltype=4
+report.desc=Weird Requests Data for given id
+report.xslt.uri=weirddata_more.xsl
+report.xslt.contentType=text/html; charset=utf-8
+
+
+

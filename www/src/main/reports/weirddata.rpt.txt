@@ -1,0 +1,8 @@
+report.name=weirddata
+report.sql=select * from vr_xml_weirdData
+report.desc=Weird Requests Data
+report.xslt.uri=weirddata.xsl
+report.xslt.contentType=text/html; charset=utf-8
+
+
+
