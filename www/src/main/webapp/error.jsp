@@ -26,7 +26,7 @@
         <div class="container">
             <div class="page-header">
                 <h1>
-                    <span class="ooops-code">Ooops! Error, code: ${pageContext.errorData.statusCode}</span>
+                    <span class="ooops-code">Sorry! Error, code: ${pageContext.errorData.statusCode}</span>
                     <small>
                         к сожалению, во время работы приложения, произошла ошибка,
                         подробности указанные ниже
