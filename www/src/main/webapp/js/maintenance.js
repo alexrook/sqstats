@@ -6,7 +6,14 @@
 function getTabData(a) {
     var tab = $(a).attr('href');
     var url = $(a).attr('data-json-get');
-    $(tab).load("rs/xslt/" + url);
+    $(tab).load("rs/xslt/" + url, function (response, status, xhr) {
+        if (xhr.status === 404) {
+            //перенаправление на несуществующую страницу, 
+            //что бы приложение отработало 404-error в соответствии с web.xml
+            window.location.href = "404";
+            $(tab).html(response);
+        }
+    });
 
 }
 

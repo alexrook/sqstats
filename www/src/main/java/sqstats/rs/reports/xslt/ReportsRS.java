@@ -6,6 +6,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.Pipe;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -60,7 +61,7 @@ public class ReportsRS extends AbstractRS {
             return Response.ok(report).type(report.getXsltMeta().getContentType()).build();
 
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new NotFoundException();
         }
 
     }
@@ -78,7 +79,7 @@ public class ReportsRS extends AbstractRS {
             return Response.ok(report).build();
 
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new NotFoundException();
         }
 
     }

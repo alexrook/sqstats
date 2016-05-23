@@ -4,6 +4,7 @@ import sqstats.rs.reports.ReportService;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -50,7 +51,7 @@ public class RawReportsRS extends AbstractRS {
             return Response.ok(rawReport).build();
 
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new NotFoundException();
         }
 
     }
