@@ -8,7 +8,7 @@
 
 Для сборки 
 
-1. Внести в конфирурацю Squid3 правки в соответсвии с cfg/src/manin/resources/config/squid.conf
+1. Внести в конфигурацию Squid3 правки в соответсвии с cfg/src/manin/resources/config/squid.conf
 2. Настроить RSyslog на сброс статистики Squid в базу данных PostgreSQL (see cfg/src/manin/resources/config/rsyslog.d_10-squid.conf)
 3. Создать базу данных PostgreSQL (see see cfg/src/manin/resources/config/run.sql)
 4. Настроить Cron для периодического обновления материальных представлений-отчетов в PostgreSQL (see cfg/src/manin/resources/config/cron.*)
