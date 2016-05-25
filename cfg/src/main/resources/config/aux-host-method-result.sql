@@ -183,9 +183,23 @@ $$
 declare 
     result int;  
     msgMd5 varchar=null;
+    message varchar=null;
 begin
-    select md5(systemEvent.message||systemEvent.fromHost) into msgMd5;
+    
+    if (length(systemEvent.message)>15) 
+        then
+            -- first 14 characters is probably timestamp, 
+            -- so we never get the same md5 for requests, 
+            -- so we cut message from that symbols
+            select substring(systemEvent.message from 15) into message;
+        else
+            select systemEvent.message into message;
+    end if;
+    
+    select md5(message||systemEvent.fromHost) into msgMd5;
+    
     select id from weirdData into result where hash=msgMd5;
+    
     if result is null 
         then
             select  nextval('weirddata_id_seq') into result; 
