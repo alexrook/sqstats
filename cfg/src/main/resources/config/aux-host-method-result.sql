@@ -186,12 +186,12 @@ declare
     message varchar=null;
 begin
     
-    if (length(systemEvent.message)>15) 
+    if (length(systemEvent.message)>16) 
         then
-            -- first 14 characters is probably timestamp, 
+            -- first 14 characters+(space) is probably timestamp, 
             -- so we never get the same md5 for requests, 
             -- so we cut message from that symbols
-            select substring(systemEvent.message from 15) into message;
+            select substring(systemEvent.message from 16) into message;
         else
             select systemEvent.message into message;
     end if;
